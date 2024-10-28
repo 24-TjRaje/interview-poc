@@ -1,0 +1,42 @@
+Changing the default web server of spring boot application.
+
+1. create a spring boot application having a spring-boot-starter-web dependency
+
+2. Once the project is loaded and dependencies are downloaded, right click on the spring-boot-starter-web dependency in the pom.xml, it will take you to the pom.xml of spring-boot-starter-web
+
+3. Here in the dependencies, copy the dependency tag for spring-boot-starter-tomcat
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <version>3.3.5</version>
+      <scope>compile</scope>
+    </dependency>
+
+4. Now, come to your applications pom.xml, and in the dependency for spring-boot-starter-web, add an exclusions tag to exclude the spring-boot-starter-tomcat
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+5. In the applications pom.xml, add the dependency for the web server that you want to include. Here we are using the jetty web server
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+		</dependency>
+
+6. Rebuild the application, using mvn clean install, to build the updated project
+
+7. Start your spring-boot application  from the IDE or use mvn spring-boot:run to start the application.
+
+8. Check the application logs. You will see the web-server on which the application is running
+
+2024-10-28T18:59:52.314+05:30  INFO 22536 --- [interview-poc] [  restartedMain] o.s.b.web.embedded.jetty.JettyWebServer  : Jetty started on port 8080 (http/1.1) with context path '/'
