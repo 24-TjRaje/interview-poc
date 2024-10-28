@@ -1,0 +1,97 @@
+Enable Spring Boot application to connect to multiple database:
+
+1. Create a spring boot project with the required dependencies. Here we have used
+starter-web, starter-jpa and sql-connector
+
+2. Separate the files related to different databases in 2 different packages in your
+main project files folder. Here main project folder is com.interview.interview_poc and
+the database related packages are student and teacher
+
+3. Place the purpose specific files like configuration, controller, entities etc.
+in their respective directories into your child directories created in step 2
+
+4. Create 2 different database instances that you want to connect from your springboot
+applications. Here we are using MySQL docker container to emulate 2 different database
+instance. Below are the commands to create 2 database container:
+
+docker run --name container-database-1 -e MYSQL_ROOT_PASSWORD=root -d -p 3304:3306 mysql:latest
+
+docker run --name container-database-2 -e MYSQL_ROOT_PASSWORD=root -d -p 3305:3306 mysql:latest
+
+5. Create the database that you want connect from your application on the database instance.
+Follow below steps on each container if you are using docker container as database instance.
+
+docker exec -it your_container_name bash
+mysql -u root -p
+Enter database password as root
+
+Now you are inside the database instance, create the database that you want.
+create database your_database_name
+
+If the database if not available before running the application, it will crash as database was
+not found
+
+5. In the application.properties, place the database related configurations for each
+database. Refer the application.properties file. Below are some important properties
+
+spring.datasource.url : The JDBC URL for connecting to the database. Specifies the database server address and database name.
+
+spring.datasource.username : The username for accessing the database.
+
+spring.datasource.password : The password for the specified database user.
+
+spring.datasource.driver-class-name : The fully qualified class name of the JDBC driver.
+
+spring.jpa.database-platform : The Hibernate dialect to use for the specific database. It allows Hibernate to generate the appropriate SQL for the database.
+
+spring.jpa.show-sql : Enables logging of SQL statements executed by Hibernate.
+
+spring.jpa.hibernate.ddl-auto : Specifies the strategy for schema generation.
+
+spring.jpa.properties.hibernate.format_sql : Formats SQL queries for easier reading in logs (true/false)
+
+6. Create your entities, repositories, services and contoller files for your database tables
+
+7. Now, create a configuration file in the configuration package, which will be used to create the database configuration. Refer the configuration files
+
+> Annotate the class with @Configuration, @EnableTransactionManager and @EnableJpaRepositories with the relevant details
+
+@Configuration : indicate that a class declares one or more @Bean methods. These methods return instances of beans that will be managed by the Spring container.
+
+@EnableTransactionManager : enable the support for programmatic transaction management in your application.it instructs Spring to look for methods annotated with @Transactional. This allows those methods to be managed with transaction semantics.
+
+@EnableJpaRepositories : enable the Spring Data JPA infrastructure to scan for repository interfaces. It automatically creates implementations for these interfaces at runtime.
+
+- basePackages : Specifies the base packages to scan for JPA repository interfaces. You can define one or more packages.
+
+- transactionManagerRef : Allows you to specify a custom transaction manager to be used for repository operations. This is particularly useful if you have multiple transaction managers in your application.
+
+- entityManagerFactoryRef : Specifies a custom EntityManagerFactory bean to be used with the repositories. This is helpful in multi-data source configurations.
+
+> create a method that configures the data source. Mark this method with @Primary and @Bean. This methos should return the an instance of DriverManagerDataSource which has the details of database url, username and password of db you want to connect
+
+@Bean : define a bean within a Spring configuration class. The method annotated with @Bean returns an instance of the bean.
+
+- name : provide the name for the bean with which it'll be managed by spring container. default name is same as that of method but in camel case
+
+@Primary : The @Primary annotation in Spring Boot is used to indicate that a bean should be given preference when multiple beans of the same type are present in the Spring application context. This helps resolve ambiguity during dependency injection.
+
+> create a method that configures the EntityManagerFactory . Mark this method with @Primary and @Bean. This methos should return the an instance of LocalContainerEntityManagerFactoryBean which has the details of datasource returned by the DriverManagerDataSource method in this class, the entities classes package location to be managed, and the JPA properties for this entity manager and the HibernateJpaVendorAdapter
+
+> create a method that configures the PlatformTransactionManager. Mark this method with @Primary and @Bean. This methos should return the an instance of PlatformTransactionManager which sets the entity manager factory returned by the method that configures the entity manager in this class.
+
+> At the class level in the @EnableJpaRepositories, replace the transactionManagerRef with the bean name for PlatformTransactionManager and entityManagerFactoryRef with the bean name for LocalContainerEntityManagerFactoryBean.
+
+8. Repeats the step 7 for all the database package, to configure them all.
+
+9. Invoke you apis to check if they are working.
+
+10. Get inside the docker container to see if data is placed in the correct database instances. Follow step 5 to get into container and use show databases and shoe tables to see database and tables and select query to check the data
+
+
+! DriverSourceDataManager : DriverManagerDataSource (often mistakenly referred to as DriverSourceDataManager) is a simple implementation of the DataSource interface that is used for managing database connections. It is part of the Spring JDBC module and provides a straightforward way to configure a database connection for applications that do not require connection pooling.
+
+! LocalContainerEntityManagerFactoryBean : It is responsible for creating an instance of EntityManagerFactory, which is used to create EntityManager instances.
+
+! PlatformTransactionManager : PlatformTransactionManager is responsible for managing transactions in your application. It allows you to begin, commit, and rollback transactions, providing a consistent API for transaction management across different data sources and technologies.
+
