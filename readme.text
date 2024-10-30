@@ -1,0 +1,29 @@
+Custom Exception Handling in Spring Boot:
+
+1. Custom Exception Handling in spring is an concept of handling exceptions in a graceful manner, providing a central place to handle all the exceptions thrown by the application and provide a proper error message for exceptions based on the time and not print the generic stack trace
+
+2. It helps use to handle increasing number of exception in an app centrally, and makes the code clutter-free by removing the try catch blocks from the code base where we know the exact exception that will happen based on logic.
+
+3. Implementation :
+
+- Create a custom exception class with the needed fields like message or code. Make sure you create different custom exceptions based on the scenario's and each of this class extends the RunTime Exception class
+
+- Create an Custom Error Response class, which you'll be sending back as a response when the exeption is handled by the global exception handler
+
+- Implement your business logic through controllers, repositories,services and entity classes.
+
+- In exception case, throw you custom exceptions with the needed fields
+
+- Create a Global Exception Handler class. annotate this class with @ControllerAdvice to mark it as a Global Exception Handler class. It has few properties
+
+> basePackages : for which packages of controllers this global handler is available
+
+> assignableTypes : list of Controller Classes on which the controller advice should be applied (selective)
+
+> annotations : apply advice for @Controller or @RestController or both
+
+- For each custom Exception Class, define a public method with returns the response entity of type of Error response. Populate it with the needed data and return it. Use the @ExceptionHandler() annotation on these methods, to redirect that specific exception thrown by the application to this handler method. pass the custom exception class this handler will handle inside (). If they are many, enclose them in {} separated by commas.
+
+- Add an handler method , to handle all other exceptions which are not specifically handled by above exception handlers. pass the exception type as Exception.class, so that it can handle all the other exceptions and specify the logic in the  to return the error response object.
+
+4. Refer code files for the implementation.
