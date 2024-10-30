@@ -1,0 +1,105 @@
+Explain conditional beans in Spring
+
+1. Conditional beans are the beans are created and registered with spring IoC container if they are able to specify a specific condition. It helps us to configure the beans in different ways based on the various conditions which enhances the flexibility of the application.
+
+2. There are diffrent scenarios where you can used conditional beans
+
+3. @ConditionalOnProperty
+
+- An annotation that i ued conditional configure a bean based on a property present in application.properties/yaml file
+
+- It has 3 main attributes:
+
+> name : name of property against which condition is to be checked . can support multiple values separated by commas
+
+> havingValue : value that has to be matched against name for which condition will match and bean will be created. does support regular expression
+
+> matchIfMissing : true/fales , whether to match or not match the condition if the property used in name is itself missing. default is false, where the property will be matched, if set true then it wont match. Can serve as a default bean if condition is missing
+
+- Implementation :
+
+> create an interface and add a method to return a string .
+
+> implement 2 service classes that implement above interface. Provide two different implementations for distinction purpose.
+
+> mark the classes with @ConditionalOnProperty, set the "name" as the value which is to be evaluated from application.properties file, set "havingValue" to the value that needs to match for the provided name.
+
+> Autowire the service of type of Interface class in a Controller and call the service method and see what is the response is.
+
+> If either of the classes matches the condition, that classes method is evaluated, as that classes bean will be created
+
+> If none ot them matches , the application wont start as the dependent service bean in controller class wont be created.
+
+> If both matches, the application will crash because of bean ambiguity, in that case mark one class as @Primary to give priorty to that class in bean creation
+
+> Consider setting "matchIfMissing" to true on any one class to make it as default bean that will be created if the name itself is not present in the application.properties. If not set, than application will crash, because no condition will match in any implementations.
+
+> Refer the ConditonalBean classes in this project for this implementation.
+
+4. @ConditionalOnClass
+
+- An annotation that helps to create a bean based on whether a class/classes are present in the class path.
+
+- It has 2 attributes:
+
+> name : fully qualified class name as string that has to be checked if present
+
+> value : array of list of fully qualified class that has to bec checked if present. enclosed in {} and seperated by commas
+
+- Implementation :
+
+> create an interface and add a method to return a string .
+
+> implement 2 service classes that implement above interface. Provide two different implementations for distinction purpose.
+
+> Add @ConditionalOnClass on both the class based on the class that you want to check for bean creation either as "name" or "value"
+
+> If either of the classes matches the condition, that classes method is evaluated, as that classes bean will be created
+
+> If none ot them matches , the application wont start as the dependent service bean in controller class wont be created.
+
+> If both matches, the application will crash because of bean ambiguity, in that case mark one class as @Primary to give priorty to that class in bean creation
+
+> Refer classes implementing ClassConditionInterface for implementation
+
+5. @ConditionalOnBean :
+
+- An annotation that decides with to create bean of this class based on the fact if any provided bean is present or not
+
+- It has 2 attributes:
+
+> name : fully qualified class name as string that has to be checked if present
+
+> value : array of list of fully qualified class that has to bec checked if present. enclosed in {} and seperated by commas
+
+> search : where to search for dependent beans in context (SearchStrategy.CURRENT/ SearchStrategy.ALL/ SearchStrategy.PARENTS)
+
+- Implementation :
+
+> Controller from the previous example is dependent on the injected beans.
+
+> Change the configuration for the beans so that the bean doesnt get created be @ConditionalOnClass or @ConditionalOnProperty
+
+> On the Controller class, add @ConditionalOnBean where the "value" be classes of dependent bean.
+
+> Run the application and try to access the controller application. You will notice that the controller endpoints wont work because the dependent service beans are not created and as a created the Controller bean is also not created which is why the api's are not exposed
+
+6. @ConditionalOnMissingBean : 180 degree opposite of @ConditionalOnBean
+
+7. @ConditionalOnMissingClass : 180 degree opposite of @ConditionalOnClass
+
+8. @ConditionalOnProfile : Beans based on active profile.
+
+9. Custom Conditional Beans :
+
+- We can create our own conditions other than the default conditional beans
+
+- Implementation :
+
+> Create a class and implement the Condition Interface
+
+> Override the matches method on whatever condition you want to assesst
+
+> Annotate the Class with @Conditional(CustomClass.class) pass the name of your Custoom Condition class name in () to apply your custom condition.
+
+> Refer the CustomCondition and CustomController classes to check the implementation
