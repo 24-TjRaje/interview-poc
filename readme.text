@@ -1,0 +1,130 @@
+REST Mapping in Spring Boot
+
+1. Rest Mappings is used to map incoming web requests to specific handler methods in the controller based on the request-type, context-path, headers etc.
+
+2. @RequestMapping
+
+- @RequestMapping is main the annotation in the Spring boot which can help use to single handedly perfrom  request routing to the handler methods.
+
+- It can either be applied at the Class Level or Method Level, but first is prepared as we have better options at method level for specific http method types
+
+- It is highly not recommended to add multiple @RequestMapping or its child annotation on the same class/method/interface because it is not useful as the application wont crash but only the first present annotation configuration will be used and the remaining annotations get ignored and a warning will be logged. ( Dont add the same annotation twice on same handler method as intellij will throw error)
+
+
+- Properties of @RequestMapping.
+
+> name : name of the bean that it'll be registered as. default name will be #method-name-in-camel-case
+
+> value/path : specifies a string to which this handler method will handle. it can also be an array, for each matched value will be redirected to same handler method
+
+ @RequestMapping("/foo") == @RequestMapping(value = "/foo") == @RequestMapping(path = "/foo")
+
+ @RequestMapping({"/foo", "/foo1}) == @RequestMapping(value = {"/foo", "/foo1} == @RequestMapping(path = {"/foo", "/foo1})
+
+ Dont try to put diff values here on same handler function as it'll cause ambbiguity while bean creation and application will crash
+
+ also supports fetching value from placeholder like @RequestMapping("/${foo}") where foo can be any value. (needs to research)
+
+> method : defines a single/array of RequestMethod types this function will handle.
+
+  @RequestMapping(method = RequestMethod.GET) = handles only get Or @RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }) = handles get or posts request
+
+  If the invoked method type doesnt match we get 405 = Method Not Allowed
+
+  If we dont specify any method type, that handler method handles all request types ( GET | POST | PATCH | PUT | DELETE | HEAD | TRACE | OPTIONS )
+
+  By default HEAD and OPTION will be handled by every handler irrespective to its request type, but the response returned will be empty
+
+> params : a single/ arrays of request params if present/absent the function will handle request
+
+ params = {"name","age"} : handles request having query params as name and age
+
+ params = "name" : handles request having query params as name
+
+ params
+
+ if path is matched but the params are not matching , we will get 400 = Invalid request parameters. eg org.params = {"name","age"}, passed.params = {"name","country"}
+
+ if you pass additional param , but it matches one handlers all params that would get invoked eg org.params = {"name","age"}/{"name","country"}, passed.params = {"name","country", "score"} will match {"name","country"}"
+
+ if it matches multiple handlers, org.params = {"name","age"}/{"name","country"}, passed.params = {"name","country", "age"} willexecute the one whos param is first in (a-z) fashion
+
+> headers : same as params but will check requestHeaders instead of request params.
+
+  If headers arent present we get 404 eg. headers = {"name","country"}, needs these 2 headers in request for function to handle it, additional will age work
+
+> consumes : what is the request body format/formats this function will handle. to be passed in Header called Content-Type
+
+> produces : what is the response body format/formats this function will handle. to be passed in Header called Accept. if in correct is sent, returns 406 = org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation
+
+3. @RequestMapping has 5 speciliased annotations having all same properties as that of @RequestMapping exception being the "method" property.
+												   @GetMapping - handles only get requests @RequestMapping(method = RequestMethod.GET)
+												   @PostMapping - handles only post requests @RequestMapping(method = RequestMethod.POST)
+												   @PutMapping - handles only update/put requests @RequestMapping(method = RequestMethod.PUT)
+												   @DeleteMapping - handles only delete requests @RequestMapping(method = RequestMethod.DELETE)
+												   @PatchMapping - handles only patch requests @RequestMapping(method = RequestMethod.PATCH)
+
+4. @PathVariable
+
+- Annotation that is used to retireve a value that is passed in the endpoint URL.
+
+- Properties:
+
+> name/value : name of the path variable in the request uri. default is "". The name passed in the uri and the value/name must match if provided else api fails. If no value is provided then too the path variable and its referencing variable name should match.
+
+@GetMapping("/xyz/{var}")
+public String greet( @PathVariable(name = "var") String var1 ) => path-variable and value matches, reference doesnt matter. correct api;
+
+@GetMapping("/xyz/{var}")
+public String greet( @PathVariable String var ) => path-variable and reference var matches, else we get error;
+
+> required : if the path variable is required or not. default if false, if the value is not present,  then we'll get an exception thrown
+
+5. @RequestBody
+
+- Annotation that tells that this api handler methods needs an request body with the request
+
+- has a single property required that tells if body is mandatory/optional. default value is mandatory (true)
+
+6. @RequestParam
+
+- Annotation that tells what all request params can be part of the request
+
+- properties:
+
+> name/value : The placeholder for the request params in the api request url . default is empty and maps to name of placeholder variable used with annotation
+
+@GetMapping(/input)
+public String getVals(@RequestParam Interger score, @RequestParam String name) => localhost:8080/input?name=TJ&score=24 - marks correct request
+
+@GetMapping(/input)
+public String getVals(@RequestParam(name = "score1") Interger score, @RequestParam(name = "name1" String name) => localhost:8080/input?name=TJ&score=24 - wont work. instead pass
+localhost:8080/input?name1=TJ&score1=24 for correct response
+
+> required : tell whether the request paramater is mandatory/optional. default value is true.
+
+@GetMapping(/input)
+public String getVals(@RequestParam(required = false) Interger score, @RequestParam(required = false) String name) => localhost:8080/input? //localhost:8080/input?name=TJ
+// localhost:8080/input?score=24 // localhost:8080/input?name=TJ&score=24  - marks correct request
+
+> defultValue : sets the default value for request param. automatically set required to false.
+
+    @GetMapping("/req-params/default/version")
+    public String getVersion(@RequestParam(defaultValue = "v1") String version) {
+        return "This is the api response from version : " +version;
+    }
+
+localhost:8080/inputs/req-params/default/version? = This is the api response from version : v1
+localhost:8080/inputs/req-params/default/version?version=v3 = This is the api response from version : v3
+
+- We can aslo pass a map for multiple rreqest params instead of specifiying @RequestParam for every value.
+
+@GetMapping("/req-params/map")
+    public String getParamsMap(@RequestParam(required = false)Map<String, String>
+                               paramsMap)
+
+7. @RequestHeader
+
+- Annotation that tells what all request headers can be part of the request
+
+- Has all the properties as similar to that of request params
