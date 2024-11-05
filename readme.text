@@ -1,0 +1,128 @@
+Q. Explain Hash Map and ways to iterate over it.
+
+1. An implementation of Map Interface
+
+2. Allows null keys and null value storage
+
+3. Order in which the data is stored is not fixed
+
+4. Creation of HashMap instance has 2 values; initialCapacity and loadFactor
+
+5. Capacity : number of buckets (key/val) that can be added. Initial is 16.
+
+6. Load Factor : Capacity after which the HashMaps capacity will be increased. Here the
+ReHashed and rebuild with new capacity double as that of current capacity. Default
+loadFactor is 0.75
+
+7. HashMap is unsynchronised in nature meaning it is not "Thread Safe". To get an
+synchronised instance use:
+
+Map m = Collections. synchronizedMap(new HashMap(...));
+
+8. Constructors for HashMap:
+
+a. HashMap<K,V> map = new HashMap<>()
+create hashmap of initial size of 16 and load factor of 16.
+
+b. HashMap<K,V> map = new HashMap<>(int initialCapacity)
+   create hashmap of defined initial size and load factor of 16.
+
+c. HashMap<K,V> map = new HashMap<>(float loadFactor)
+   create hashmap of initial size of 16 and defined load factor.
+
+d. HashMap<K,V> map = new HashMap<>(int initialCapacity, float loadFactor)
+create hashmap of defined initial size and defined load factor.
+
+e. HashMap<K,V> map = new HashMap<>(Map<K,V> m)
+   create hashmap having data with passed 'm' hashmap without default load factor
+
+- Initial capacity/ load factor cannot be negative.
+
+9. Iterators on HashMap are fail-fast meaning any modifications over HashMap while
+iterating will throw ConcurrentModificationException , except fro the remove operation
+
+10. It also extends the AbstractMap class and implements the Cloneable and
+Serializable interfaces
+
+10. Important methods :
+
+- int size : returns size of map
+
+- boolean isEmpty : check if size==0 or map is null
+
+- V get (Key K) : returns value against the mentioned Key or null. At max there can be
+only one value against one key. note that null can be a value that is mapped against key
+as map allows null values
+
+- boolean containsKey(Key k) : return whether we have a mapping against the mentioned key
+
+- V put( Key k, Value v) : adds a key-value mapping in the map and returns the previous value.
+If the key already exists, then the value is updated. can return null if the mapped key has
+earlier value of null or the key never existed before
+
+- void putAll(Map<K,V> map) : copies all the mapping from mentioned map into the invoked
+map. Gives null pointer exception if mentioned map is empty. old values will be replaced
+if the key already exists
+
+- V remove(Key k) : removes the mapping with mentioned key on invoked map and returns
+the previous value against the key. can return null if value itself is null, or key
+is absent
+
+- void clear() : removes all the mappings from the map and makes it empty
+
+- boolean containsValue(Value v) : checks if the value is present in map
+
+- Set<K> keySet() : returns set with all Keys of a map. Has real-time reflections of keys
+present in the map and support removal operation that will be instantly reflected in Map
+as well.
+
+- Collection<V> values() : returns all the values in the map. Has real-time reflections of keys
+present in the map and support removal operation that will be instantly reflected in Map
+as well.
+
+- Set<Map.Entry<K,V>>  entrySet() : returns a set of all the entry mappings in the map.
+Has real-time reflections of keys present in the map and support removal operation that will be instantly reflected in Map
+as well.
+
+- V getOrDefault(Key k, Value d) : return value against the map key if found or d
+
+- and many more....
+
+11. Ways to iterate over hash map:
+
+- ForEach with EntrySet : get the entrySet and use the entry.getKey() and entry.getValue()
+
+    public static void iterateUsingEntrySet(HashMap<String, Integer> input) {
+
+        System.out.println("Iteration using entrySet and for each.");
+        Set<Map.Entry<String, Integer>> iterated = input.entrySet();
+
+        for(Map.Entry<String, Integer> entry : iterated){
+            System.out.println(" Key : " + entry.getKey() + " - Value : "
+            + entry.getValue());
+        }
+    }
+
+- Using Iterator with EntrySet: USe Iterator.hasNext() to see if there are more entries
+of .next() to retrieve next element
+
+    public static void iterateUsingIterator(HashMap<String,Integer> input) {
+
+        System.out.println("Iteration using Iterator");
+        Iterator<Map.Entry<String, Integer>> iterator = input.entrySet().iterator();
+
+        while(iterator.hasNext()) {
+            Map.Entry<String, Integer> entry = iterator.next();
+            System.out.println(" Key : " + entry.getKey() + " - Value : "
+                    + entry.getValue());
+        }
+    }
+
+- Using Lambda with forEach in streamApi.
+
+    public static void iteratorUsingStream(HashMap<String, Integer> input) {
+
+        System.out.println("Iteration using Stream API");
+        input.entrySet().forEach( entry -> System.out.println(" Key : " + entry.getKey() + " - Value : "
+                + entry.getValue()));
+    }
