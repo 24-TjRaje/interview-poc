@@ -1,0 +1,20 @@
+Code to swap all occurence of particular number to extreme ends of list
+
+1. Convert the incoming Integer[] to list using List.of(arrayName);
+
+2. Create 2 more ArrayList to hold 1. All numbers other than one to move. 2. All occurences
+of number to be moved.
+
+3. In the first list, use the stream api and filter method , to filter out all the elements
+that are not the one that is to be moved and save to a list using toList().
+
+4. In the second list, use the stream api and filter method, to filter out elements that are
+ones to be moved and save to other list using toList();
+
+5. Check for the direction, if it is left, intialise a new list with the list having
+the list of number that is to be moved. Add the other list elements to this new list to
+get the final answer
+
+6. Check for the direction, if it is right, intialise a new list with the list having
+   the list of number that is not to be moved. Add the other list elements to this new list to
+   get the final answer
