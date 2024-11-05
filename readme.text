@@ -1,0 +1,23 @@
+Q. Write a java code to check if the strings are Anagram.
+
+Explain:
+
+1. 2 strings are anagrams when you they have same characters which can be
+rearranged to make other string
+
+2. Example : silent = listen, acer = race = care.
+
+Approach 1 :
+
+1. use string.split(""),  to split string to individual characters in a list of String
+
+2. use containsAll() on both the list and check if there length is same.
+
+Approach 2 :
+
+1. split the strings into the character array using .toCharArray();
+
+2. Use Arrays.sort(char[]) to sort both the arrays
+
+3. Use the Arrays.equals(arr1, arr2) if they are equal.
+
