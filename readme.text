@@ -1,0 +1,86 @@
+@. How to create an immutable class in java?
+
+1. An immutable class is a class whose instance cannot be modified once created
+
+2. Create a class with the final keyword, so that no one can able to modify this class
+via extension/inheritance
+
+3. Mark all the fields as private and final so that via private they cannot be accessed
+from outside the class and final so that once initialised their values cannot be updated
+
+4.  Have an all args constructor to initialse all the fields at once
+
+5. Provide no setter for the fields , since the updation is not allowed, but provide getters
+to retrieve field values
+
+6. For POJO, Collection, in  getter, pass the new object by copying all elements/fields
+instead of passing reference, as reference can be modified and they will reflect in the
+original object.
+
+- Implementation
+
+package com.interview.interview_poc;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public final class StudentImmutable {
+
+    private final String name;
+    private final Integer age;
+    private final List<String> skills;
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public List<String> getSkills() {
+        return new ArrayList<>(this.skills);
+        //return skills;
+        //comment first line and uncomment second and then this list is no more mutable
+    }
+
+    public StudentImmutable(String name, Integer age, List<String> skills) {
+        this.name = name;
+        this.age = age;
+        this.skills = skills;
+    }
+
+    public final void studentDetails() {
+        System.out.println("Hello my name is " + this.name +" and I am "
+        + age + " years old!");
+    }
+
+	public static void main(String[] args) {
+		SpringApplication.run(InterviewPocApplication.class, args);
+
+		System.out.println("** Immutable Class **");
+
+		//Addition/Removal to a list created using List.of() will throw
+		//UnsupportedOperationException since list is being created using
+		// factory method. They are shallow immutable meaning if reference is
+		//passed, its vals can be modified. So use the new operator
+
+		List<String> skillSet = new ArrayList<>();
+		skillSet.add("Java");
+
+		StudentImmutable s1 = new StudentImmutable("Tejas", 24, skillSet);
+		System.out.println(s1.getAge());
+		System.out.println(s1.getName());
+		System.out.println(s1.getSkills());
+
+		List<String> skills1 = s1.getSkills();
+		skills1.add("Flutter");
+
+		System.out.println(s1.getSkills());
+
+	}
+
+
+
+}
+
