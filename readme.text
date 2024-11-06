@@ -1,0 +1,71 @@
+Q. Explain optional classes.
+
+1. Optional is a class of java.util package whose instances can be hold values which
+may or may not be null.
+
+2. It is used in cases where a null value may return into NullPointerException causing the
+code flow to break and provides a safe fallback without using try-catch
+
+3. Methods of optional:
+
+- T get() -> used to retrieve the value inside the optional if it is present
+
+- boolean isPresent() -> tell whether there is a value present or is null
+
+- boolean isEmpty() -> tells if the value is null(true) or present(false). Opp. of isPresent
+
+- void ifPresent(Consumer c) -> if value is present, perform the consumer action. Throws
+NullPointerException if the consumer is null
+
+- T orElse(T t) -> if value is present then return it or return the passed default value
+
+- T orElseThrow() -> if value is present return it, if it is null throw NoSuchElementException
+
+4. Optional does have other methods like ifPresent() to do conditional actions,
+.filter(), .map(), .stream() which helps us to integrate it using stream api.
+
+5. Know more on these operations if needed as they are not used frequently.
+
+6. Implementation :
+
+        // Optional for fixed value. if null is passed NPE is thrown
+		String input = "Tejas";
+		Optional<String> wrap = Optional.of(input);
+
+        //Optional for may be nullable values. No NPE thrown
+		String intake = null;
+		Optional<String> trap = Optional.ofNullable(intake);
+
+		System.out.println("Input : " + input);
+		System.out.println("Intake : " + null);
+
+        // Checking if the value is present in Optional
+		System.out.println("Checking if the value exists for Input : " + wrap.isPresent());
+		System.out.println("Checking if the value exists for Intake : " + trap.isPresent());
+
+        // Checking if optional is Empty
+		System.out.println("Checking if the value's empty for Input : " + wrap.isEmpty());
+		System.out.println("Checking if the value's empty for Intake : " + trap.isEmpty());
+
+        // Retrieving values if present
+		if(wrap.isPresent())
+			System.out.println("Value of wrap/Input is : " + wrap.get() );
+
+		if(trap.isEmpty())
+			System.out.println("Value of trap/Intake is empty");
+
+        // Additional processing if value is present
+		wrap.ifPresent(value -> System.out.println("Hello. Greetings from " + wrap.get()));
+
+        // Throwing exception if value is not present
+		try {
+			System.out.println("Greetings from " + trap.orElseThrow());
+		} catch(NoSuchElementException e) {
+			System.out.println("Cannot greet you from trap/Intake because " + e.getMessage());
+		}
+
+		// If value is absent set default
+		System.out.println("Greetings from " + wrap.orElse("unknown"));
+		System.out.println("Greetings from " + trap.orElse("unknown"));
+
+	}
