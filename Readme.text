@@ -1,0 +1,38 @@
+Q. what is flatMap()?
+
+1. A flatmap is an operation in the Stream API which is used to convert multiple collections
+into a single collection.
+
+2. It is an intermediate operation and returns a stream of values therefore.
+
+3. It can be used with same collection type , but different paramater type or different
+collection type all together.
+
+4. To create a flat Map with Some Collection Type and Parameter
+
+- Assume there is a List<List<String>> input
+
+ in that case do input.stream.flatMap(List::stream).toList() to merge the all lists
+ in one list. The output list will be of type String.
+
+ 5. To create a flatMap with some collection type but different paramter
+
+ - Assume we get a List<List<?>> input where ? tells that inside lists are of mix
+ types like List<String>, List<Integer> etc.
+
+ in that case do input.stream.flatMap(List::stream).toList() to merge the all lists
+in one list. The output list will be of type ? since mixed
+
+ 5. To create a flatMap with different collection type
+
+ - Assume we get a List<Collection<?>> input where ? tells that inside lists are of mix
+ types like List<String>, Set<Doubles> etc.
+
+ in that case do input.stream.flatMap(Collection::stream).toList() to merge the all lists
+in one list. The output list will be of type ? since mixed
+
+6. Here List::stream or Collection::stream is the most important part of flattening as
+it provides a stream of objects of current collection in the stream which is the main
+purpose of flatMap i.e merge multiple collections to one
+
+
