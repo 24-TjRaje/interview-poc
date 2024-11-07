@@ -1,0 +1,37 @@
+Q. Explain ; == and equals() in Java
+
+1. == is used to check the reference equality in java  and it checks whether both the
+variables are pointing to same object in the memory
+
+2. However, in case of primitive types like int, char, long, boolean etc ; it used to
+check the value equality as there is no concept of reference for primitives.
+
+3. In case of == for Object classes, it will always check whether the variables are
+referencing to same objects in the memory.
+
+4. equals() is to check the value/content equality between 2 objects. equals() is not
+applicable for primitive data types
+
+5. The default implementation of equals() works similar to  == in Object class and will
+check for reference equality
+
+6. But for wrapper classes like Integer, Character, Boolean, Float etc and String, the
+equals is overriden to compare the contents.
+
+7. For custom classes, == will always check for reference equality. So when new keyword
+is used in both object, == will always be false
+
+8. For custom classes equals(), we need to always override the equals() method based on
+our requirement because default is provided via Object class equals which internally uses
+==
+
+9. Idea for overriding custom equals:
+
+- check if obj 1 == obj2 , if true then equals;
+
+- check in obj1 and obj2 are instanceOf same class;
+
+- If yes, compare the fields that will mark equality and return likewise.
+
+---
+
