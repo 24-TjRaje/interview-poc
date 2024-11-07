@@ -1,0 +1,120 @@
+Q. Explain ways to iterate our List
+
+1. Iterating using basic for-loop:
+
+- Use basic for loop to iterate over list
+
+    public static void iterateFor(List<String> countries) {
+        System.out.println("Iterating using for loop : ");
+        for(int i=0; i< countries().size(); i++)
+            System.out.println(countries.get(i));
+    }
+
+2. Iterating using enhanced for loop :
+
+- Enhnaced for loop for more simple and readable syntax
+
+    public static void iterateEnhancedFor(List<String> countries) {
+        System.out.println("Iterating using Enhanced for loop :");
+        for(String s : countries)
+            System.out.println(s);
+    }
+
+3. Iterating using an iterator :
+
+- An iterator to loop over a list.
+
+- Advantage is we can concurrently modify the list which iterating over it which was
+a drawback of its predecessor Enumeration : a legacy feature
+
+- It is a fail fast iterator meaning , any structural changes made to the collection
+will throw ConcurrentModificationException. Here the count of elements is tracked by iterator.
+Add or Remove operation will cause change in the size of Collection implying structural
+change. As a result while doing remove(), we call next() first because the element will alreay
+get counted
+
+- Few methods of Iterator:
+
+= boolean hasNext() - Tells if iterator has a next value from the list
+
+= T next() - returns next element by iterator in the list
+
+= void remove() - removes the last returned element by the iterator. Make sure you
+call next() method first before calling remove() over it will throw IllegalStateException
+
+    public static void iterateIterator(List<String> countries) {
+        System.out.println("Iterating using Basic Iterator :");
+        Iterator<String> iterator = countries.iterator();
+        while(iterator.hasNext())
+            System.out.println(iterator.next());
+    }
+
+4. Iterating over ListIterator :
+
+- An advanced iterator only available for List classes
+
+- It has all the features of basic iterators plus some additional capabilities like
+traversal in either direction, adding elements, knowing the current index of the iterator
+
+- Its cursor is always between the next and the previous element and not on any specific
+element and if size of list is n , then there are n+1 cursors
+
+- Additional methods :
+
+- T previous() : returns the previous element of the list and moves the cursor backwards
+
+- boolean hasPrevious() : Returns true if this list iterator has more elements when
+ traversing the list in the reverse direction.
+
+- int nextIndex() : Returns the index of the element that would be returned by a
+ subsequent call to next. (Returns list size if the list iterator is at the end of the list.)
+
+- int previousIndex() : Returns the index of the element that would be returned by a
+ subsequent call to previous. (Returns -1 if the list iterator is at the beginning of
+ the list.)
+
+- void remove : Removes from the list the last element that was returned by next or previous
+ (optional operation). This call can only be made once per call to next or previous.
+  It can be made only if add has not been called after the last call to next or previous.
+
+- void set(E e) :  Replaces the last element returned by next or previous with the specified element
+ (optional operation). This call can be made only if neither remove nor add have been
+  called after the last call to next or previous.
+
+- void add(E e) : Inserts the specified element into the list (optional operation).
+ The element is inserted immediately before the element that would be returned by next,
+  if any, and after the element that would be returned by previous, if any.
+ (If the list contains no elements, the new element becomes the sole element on the list.)
+ The new element is inserted before the implicit cursor: a subsequent call to next would be
+ unaffected, and a subsequent call to previous would return the new element. (This call
+ increases by one the value that would be returned by a call to nextIndex or previousIndex.)
+
+-     public static void iterateListIterator(List<String> countries) {
+          System.out.println("Iterating using List Iterator :");
+          ListIterator<String> iterator = countries.listIterator();
+          while(iterator.hasNext())
+              System.out.println(iterator.next());
+      }
+
+5. Iterating forEach() :
+
+- uses forEach(Consumer<T>) which is a java 8 syntax using a lambda function
+
+- Used to make clean and concise
+
+    public static void iterateForEach(List<String> countries) {
+        System.out.println("Iterating using for Each :");
+        countries.forEach(country -> System.out.println(country));
+    }
+
+6. Iterating using parallel() + forEach() :
+
+- same as forEach but is a part of stream API.
+
+- uses parallel to iterate quickly over large sets
+
+    public static void iterateParallel(List<String> countries) {
+        System.out.println("Iterating using Parallel Stream :");
+        countries.stream().parallel().forEach(country -> System.out.println(country));
+    }
+
