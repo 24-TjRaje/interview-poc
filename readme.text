@@ -1,0 +1,140 @@
+@. Explain bean scopes in Spring
+
+1. Bean scopes refers to the fact how the bean is created and managed by the spring container
+
+2. Management here refers the lifecycle and visibility of the bean.
+
+3. There are in total 6 bean scopes:
+
+4. Singleton
+
+- It is default bean scope of any defined bean.
+
+- Creates only one bean for that type in the entire spring container which is shared by
+everyone
+
+- useful for purpose of logging, utility functions and database access classes wherever the
+functionality is common and can be shared
+
+5. Prototype
+
+- Returns a new instance of bean from spring container whenever needed/injected.
+
+- useful to provide isolation for performing a task using this bean
+
+- lifecycle is not fully managed by spring container, need to be destroyed manually
+
+6. Request
+
+- Specially used for web applications.
+
+- Every HTTP request, spring container will return a new instance of this bean
+
+- Bean is destroyed once the request is completed
+
+7. Session
+
+- Specially used for web applications.
+
+- Every session, spring container will return a new instance of this bean
+
+- Created when the session starts and destroyed when the session is ended
+
+- Useful to store data on an individual that spans across multiple requests like shopping
+cart
+
+8. Application
+
+- Specially used for web applications.
+
+- One bean is created for every ServletContext.
+
+- Data is shared across multiple sessions and requests
+
+- Suitable for application-wide data that should be shared across sessions and requests and
+data that are global settings or different parts of web app.
+
+9. WebSocket
+
+- Specially used for web socket applications.
+
+- A WebSocket-scoped bean creates a new instance per WebSocket session.
+
+- Scoped to a WebSocket session lifecycle, meaning the bean is created
+ when the WebSocket session starts and destroyed when it ends.
+
+9. Implementation :
+
+- Define a configuration class with Beans having different scopes
+
+@Configuration
+public class SingletonClass {
+
+    @Bean
+    public BeanExample goodMorning() {
+        return new BeanExample(UUID.randomUUID(), "singleton");
+    }
+
+    @Bean
+    @Scope("prototype")
+    public BeanExample goodMorningPrototype() {
+        return new BeanExample(UUID.randomUUID(), "prototype");
+    }
+
+    @Bean
+    @Scope("request")
+    public BeanExample goodMorningRequest() {
+        return new BeanExample(UUID.randomUUID(), "request");
+    }
+
+    @Bean
+    @Scope("session")
+    public BeanExample goodMorningSession() {
+        return new BeanExample(UUID.randomUUID(), "session");
+    }
+}
+
+- Create a Rest Controller to invoke methods on these beans
+
+@RestController
+@RequestMapping("/scopes")
+public class TestController {
+
+    @Autowired
+    private SingletonClass sc;
+
+    @Autowired
+    private SingletonClass sc1;
+
+    @GetMapping("/singleton")
+    public BeanExample getSingleton() {
+        return sc.goodMorning();
+    }
+
+    @GetMapping("/prototype")
+    public BeanExample getPrototype() {
+        return sc.goodMorningPrototype();
+    }
+
+    @GetMapping("/request")
+    public BeanExample getRequest() {
+        return sc.goodMorningRequest();
+    }
+
+    @GetMapping("/session")
+    public BeanExample getSession() {
+        return sc.goodMorningSession();
+    }
+}
+
+10. Verification (By invoking the api from postman, chrome and incongnito tab)
+
+- Singleton : you will get same Id unless the application is restarted
+
+- Prototype : On every invocation, we get new id irrespective of how it is invoked
+
+- Request : On every request hit, new Id us created
+
+- Session : Session Id will be different invocation points, but remain same when invoked
+on same platform. Will get refreshed when the application is refreshed
+
