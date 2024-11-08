@@ -1,0 +1,117 @@
+Q. Explain Autoboxing and unboxing in Java
+
+1. Autoboxing is a process of automatically converting primitive data types to its
+equivalent Wrapper class
+
+2. Examples : int -> Integer, char -> Character, long -> Long, boolean -> Boolean etc.
+
+3. Unboxing is a process of automatically converting wrapper objects to their eqivalent
+primitive values
+
+4. Examples : int <- Integer, char <- Character, long <- Long, boolean <- Boolean etc.
+
+5. Behind the scenes during Autoboxing
+    int i = 10;
+    Integer i1 = i // Behind it is: Integer i1 = Integer.valueOf(i)
+
+6. Behind the scenes during Unboxing
+    Integer i = 10;
+    int i1 = i // Behind it is: int i1 = i.intValue()
+
+7. Advantages of Autoboxing and Unboxing :
+
+- Helps to extend primitive to Objects which can the leverage utility methods of respective
+Wrapper class and also use the power of Collections like ArrayList, Map etc. as primitives
+cannot work with Collections , they require Objects
+
+8. Disadvantages of Autoboxing and Unboxing :
+
+- Autoboxing overhead of converting primitive to Objects, where they can fill up memory
+and can lead to performance issues.
+
+- Can throw Null Pointer exception while converting to primitive as Wrapper can be set
+to null, but primitives cannot
+
+9. Wrapper equality :
+
+- Wrapper equality can lead to incorrect results as the "==" will only be true till
+the range of the primitive type. Post that it will always be false.
+
+- Check below code for more details
+
+10. Implementation:
+
+	public static void main(String[] args) {
+		SpringApplication.run(InterviewPocApplication.class, args);
+
+		int a = 10;
+		boolean b = true;
+
+		Integer a1 = a;
+		Boolean b1 = b;
+
+		System.out.println("Autoboxing");
+		System.out.println(a1.getClass() + " : " + a1);
+		System.out.println(b1.getClass() + " : " + b1);
+
+		int a2 = a1;
+		boolean b2 = b1;
+
+		System.out.println("Unboxing");
+		System.out.println(a2);
+		System.out.println(b1);
+
+		System.out.println("Manual autoboxing");
+		Integer i = Integer.valueOf(10);
+		Character c = Character.valueOf('c');
+
+		System.out.println(i + " " + c);
+
+		int ip = i.intValue();
+		char cp = c.charValue();
+
+		System.out.println(ip + " " + cp);
+
+		System.out.println("Equals issue :");
+
+		Integer int1 = 100;
+		Integer int2 = 100;
+
+		System.out.println(int1 + " == " + int2 + " ? " + (int1 == int2));
+		System.out.println(int1 + " equals " + int2 + " ? " + (int1.equals(int2)));
+
+		int1 = 254; int2 = 254;
+		System.out.println(int1 + " == " + int2 + " ? " + (int1 == int2));
+		System.out.println(int1 + " equals " + int2 + " ? " + (int1.equals(int2)));
+
+		Long l1 = 10000l;
+		Long l2 = 10000l;
+
+		System.out.println(l1 + " == " + l2 + " ? " + (l1 == l2));
+		System.out.println(l1 + " equals " + l2 + " ? " + (l1.equals(l2)));
+
+		l1 = 88888l; l2 = 88888l;
+		System.out.println(l1 + " == " + l2 + " ? " + (l1 == l2));
+		System.out.println(l1 + " equals " + l2 + " ? " + (l1.equals(l2)));
+	}
+
+- Output :
+
+Autoboxing
+class java.lang.Integer : 10
+class java.lang.Boolean : true
+Unboxing
+10
+true
+Manual autoboxing
+10 c
+10 c
+Equals issue :
+100 == 100 ? true
+100 equals 100 ? true
+254 == 254 ? false
+254 equals 254 ? true
+10000 == 10000 ? false
+10000 equals 10000 ? true
+88888 == 88888 ? false
+88888 equals 88888 ? true
