@@ -1,0 +1,17 @@
+Q. What happens if the application.properties/yaml is removed ?
+
+1. The application will run with the default properties provided by springboot like
+server.port=8080, context path as /.
+
+2. application.properties/yaml are optional and used to provide custom configuration to
+your application like actuators endpoints, datasource details etc
+
+3. Apart from application.properties/yaml, you can also create your custom configurations
+by declaring a configuration class and returning beans with necessary data.
+
+4. Also you can provide runtime arguments from CLI, which can serve as your application
+properties
+
+5. Also you can store your property file with any names like custom.properties or
+dev,properties and use the @PropertySource annotation to tell the classpath of file
+from which file the properties are to be loaded.
