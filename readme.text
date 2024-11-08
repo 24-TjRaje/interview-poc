@@ -1,0 +1,101 @@
+Q. Explain @profile in Spring Framework.
+
+1. @Profile annotation is a way to make a bean active/inactive in the spring container
+based on the current profile of the running application
+
+2. Profile is a logical way to separate different environments, so that they can have
+their own specific configurations
+
+3. It can be set declaratively by a property called spring.profiles.active=value
+
+4. It default profile active in a springboot application is "default"
+
+5. We can pass either one value or array of strings to profile
+
+- @Profile("dev") = will be only registered if profile is dev.
+
+- @Profile("!dev") = will be only registered if profile is not dev.
+
+- @Profile({"dev", "qa"}) = will be only registered if profile is dev or qa.
+
+5. Using with @Bean
+
+- @Profile can be used along with @Bean on a method, to initiate the bean on the profile
+
+6. Using with @Component/@Configuration
+
+- @Profile can also be used with @Component/@Configuration to load all its beans based on
+profile
+
+7 Implementation :
+
+- @Bean + @Profiles
+
+@Configuration
+public class ServerConfig {
+
+    @Profile("dev")
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer() {
+        return factory -> factory.setPort(8081); // Set the port here
+    }
+
+    @Profile("qa")
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizerQa() {
+        return factory -> factory.setPort(8082); // Set the port here
+    }
+
+    @Profile("prod")
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizerProd() {
+        return factory -> factory.setPort(8083); // Set the port here
+    }
+}
+
+= change the profiles in application.properties using spring.profiles.active and see that
+the application will run on different ports based on profile
+
+- @Bean + @Configuration/@Component
+
+public interface ProfileService {
+
+    public String envMessage() ;
+}
+
+@Service
+@Profile("dev")
+public class ProfileServiceDevImpl implements ProfileService {
+
+    @Override
+    public String envMessage() {
+        return "This is dev env running on port 8081";
+    }
+}
+
+@Service
+@Profile("prod")
+public class ProfileServiceProdImpl implements ProfileService {
+    @Override
+    public String envMessage() {
+        return "This is default prod running on port 8083";
+    }
+}
+
+@RestController
+@RequestMapping("/profiles")
+public class ProfileController {
+
+    @Autowired
+    private ProfileService ps;
+
+    @GetMapping
+    public String envMessage() {
+        return ps.envMessage();
+    }
+}
+
+= change the profiles in application.properties using spring.profiles.active and see that
+  the controller will return different message based on profile
+
+8. It is similiar to @Conditional or @ConditionalOnProperty and can be used for same purpose.
