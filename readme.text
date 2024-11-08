@@ -1,0 +1,61 @@
+Q. Find the 'n' largest element of array.
+
+1. First convert the primitive array to the list
+
+List<Integer> list = IntStream.of(input).boxed().collect(Collectors.toCollection(ArrayList::new));
+
+- You can use specific streams like IntStream, LongStream or DoubleStream.
+
+2. Approach 1 :
+
+- use Collection.sort() to sort the list in ascending order
+
+- if size of list is greater than 1, return list.get(list.size()-2)
+
+- if size  is less than 2 return 0.
+
+3. Approach 2 :
+
+- use stream() on the list. apply sort() with argument as Comparator.reverseOrder to sort
+in descending order and limit(2) to top 2 elements of list
+
+- again use stream from above and use min(Comparator.naturalOrder()) to sort in natural order
+and getFirst or else return any value you want
+
+4. Approach 3 :
+
+- use stream(), distinct() to remove duplicates, sort(Comparator.reverseOrder()) to sort
+elements in reverse order, skip(1) to ignore first element , and getFirst() to return first
+element , orElse() your default value
+
+5. Implementation
+
+public class SecondMaxOps {
+
+    public static Integer secondMax1(List<Integer> input) {
+        Collections.sort(input);
+        if(input.size()>1)
+            return input.get(input.size() - 2);
+        else
+            return 0;
+    }
+
+    public static Integer secondMax2(List<Integer> input) {
+        Stream<Integer> s = input.stream().sorted(Comparator.reverseOrder()).limit(2);
+        return s.min(Comparator.naturalOrder()).orElse(0);
+    }
+
+    public static Integer secondMax3(List<Integer> input) {
+        return input.stream().sorted(Comparator.reverseOrder()).skip(1).findFirst().orElse(0);
+    }
+}
+
+public static void main(String[] args) {
+		SpringApplication.run(InterviewPocApplication.class, args);
+		int[] input = new int[] {32, 33, 44, 46, 50, 26, 22, 42, 79, 58, 65, 39, 53};
+		//int[] input = new int[] {89,22};
+		//int[] input = new int[] {86};
+		 //int[] input = new int[] {};
+		List<Integer> list = IntStream.of(input).boxed().collect(Collectors.toCollection(ArrayList::new));
+		System.out.println(SecondMaxOps.secondMax3(list));
+}
