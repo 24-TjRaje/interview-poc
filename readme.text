@@ -1,0 +1,18 @@
+Q. Find nth highest in an array
+
+0. If n<2 return -1, because 1-1 =0 and 0-1 = -1 will throw .IllegalArgumentException when n
+becomes negative
+
+1. Convert array to arrayList
+
+- List<Integer> a = IntStream.of(input).boxed().collect(Collectors.toCollection(Arraylist::new));
+
+boxed() = converts primitive int to wrapper Integer class object
+collect() = stores to a new Array List
+
+2. Sort list in remove duplicates, sort the list in reverse order, skip(n-1) elements and
+return the first element of default value
+
+return a.stream().distinct()
+                .sorted(Comparator.reverseOrder())
+                .skip(nth-1).findFirst().orElse(0);
