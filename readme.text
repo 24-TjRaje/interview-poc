@@ -1,0 +1,65 @@
+Q. Write code to reverse a string and check palindrome.
+
+1. Approach one - Without using inbuild variable;
+
+- intialise a new empty string say output
+
+- For every character, update the output by concatenating char to the output
+
+- Implementations :
+
+public static String reverse1(String input) {
+        String output = "";
+        for(char c : input.toCharArray())
+            output = c + output;
+        return output;
+    }
+
+- Iterations :
+
+char 't' + output "" -> "t"
+char 'e' + output "t" -> "et"
+char 'j' + output "et" -> "jet"
+char 'a' + output "jet" -> "ajet"
+char 's' + output "ajet" -> "sajet"
+
+2. Approach using inbuild function :
+
+- Create a new StringBuilder object with passed input string as constructor argument
+
+- apply the StringBuilder's reverse() and return with toString()
+
+- Implementation :
+
+    public static String reverse2(String input) {
+        StringBuilder sb = new StringBuilder(input);
+        return sb.reverse().toString();
+    }
+
+3. Strings are palindrome when the string is equal to the reverse of the string.
+
+- eg : Nayan=nayaN, madam=madam
+
+- Approach :
+
+- use the above reverse function to reverse the string.
+
+- compare the reversed string to input using equals() or equalsIgnoredCase();
+
+- Implementation :
+
+    public static boolean isPalindrome(String input) {
+        return input.equalsIgnoreCase(reverse2(input));
+    }
+
+- For palindrome ignore spaces and punctuation, replace all the characters that arent
+alphanumeric using empty character ""
+
+- reverse the cleaned string and check equality of the cleaned and reversed string
+
+- Implementation :
+
+    public static boolean isPalindromeWithSymbols(String input) {
+        String cleaned = input.replaceAll("[\\W]", "");
+        return cleaned.equalsIgnoreCase(reverse2(cleaned));
+    }
