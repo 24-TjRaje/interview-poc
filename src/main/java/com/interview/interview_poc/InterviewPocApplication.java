@@ -8,6 +8,8 @@ public class InterviewPocApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(InterviewPocApplication.class, args);
+		String input = "Tejas Devidas Raje";
+		System.out.println(CharacterFreqOps.characterFrequency(input));
 	}
 
 }

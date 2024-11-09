@@ -1,0 +1,23 @@
+Q. Write code to count occurrence of each character in string
+
+1. Convert the String to List<String>:
+
+- either do List<String> a = Arrays.asList(input.split(""));
+        OR
+List<String> inputList = new ArrayList<>(Arrays.asList(input.split("")));
+
+second one is preferred
+
+2. Use a forEach() operation and put the element and its frequency in the List into a map
+
+3. Implementation :
+
+    public static Map<String, Integer> characterFrequency(String input) {
+        List<String> inputList = new ArrayList<>(Arrays.asList(input.split("")));
+        Map<String, Integer> result = new HashMap<>();
+        inputList.stream().forEach(i -> {
+            result.put(i, Collections.frequency(inputList, i));
+        });
+        return result;
+    }
+
