@@ -1,0 +1,121 @@
+Q. Explain @Qualifier and @Primary in spring framework
+
+1. @Primary is an annotation that is used to make a bean default have highest priority , when
+there are multiple beans of same type in the Spring Container.
+
+2. This annotation helps us to avoid ambigious situation by assigning highest priority to
+a bean which will be provided when multiple beans of same type are present.
+
+3. Make sure you dont make 2 beans of same type as primary, as it will throw
+.NoUniqueBeanDefinitionException
+
+4. @Qualifier annotation is used to provide a specific bean when there are multiple
+beans of a type is present and you dont want to use your Primary/Default bean but
+instead need a specific bean among all present beans.
+
+5. Pass the name of the bean, that you need with @Qualifier
+
+@Qualifer("myFavBean") == @Qualifier(value = "myFavBean")
+
+6. The @Qualifier will always take priority over @Primary when both are present.
+
+7 . Implementation:
+
+- Create an interface named QualifierOps and add a method in that interface that is to be
+implemented:
+
+public interface QualifierOps {
+
+    public String message();
+}
+
+- Create three implementations of QualifierOps, that have different implementations of
+the abstract method. Mark implementation classes with @Service to register its bean with
+spring container
+
+@Service
+public class EnglishQualifierOpsImpl implements QualifierOps {
+    @Override
+    public String message() {
+        return "Hello. Good Morning!!!";
+    }
+}
+
+===
+@Service
+public class MarathiQualifierOpsImpl implements QualifierOps {
+    @Override
+    public String message() {
+        return "Namaskaar. Su-Prabhaat!!!";
+    }
+}
+
+===
+@Service
+public class SpanishQualifierOpsImpl implements QualifierOps {
+    @Override
+    public String message() {
+        return "Hola. Buenos Dias!!!";
+    }
+}
+
+- Create a controller and inject/autowire the interface bean to call its methods
+
+@RestController
+@RequestMapping("/hello")
+public class HelloController {
+
+    @Autowired
+    private QualifierOps qs;
+
+    @GetMapping
+    public String getHelloMessage() {
+        return qs.message();
+    }
+}
+
+- Try running the application, you'll get an error :
+
+Field qs in com.interview.interview_poc.HelloController required a single bean, but 3 were found:
+englishQualifierOpsImpl, marathiQualifierOpsImpl, spanishQualifierOpsImpl
+
+This is because Spring Container is confused which bean is to be injected for QualifierOps as
+3 beans are present for the it.
+
+- Mark one of the implemenation as @Primary and restart the application. Invoke the REST
+API and you'll get the response from the class that was marked as @Primary as it recieved
+a higher priority over other implementation , thus acting as a default when no specific
+type is specified and multiple candidates are present
+
+@Primary
+@Service
+public class MarathiQualifierOpsImpl implements QualifierOps
+
+http://localhost:8080/hello -> Namaskaar. Su-Prabhaat!!!
+
+- Now mark one other implementation with @Primary as well and start the application.
+
+NoUniqueBeanDefinitionException: No qualifying bean of type
+'com.interview.interview_poc.QualifierOps' available: more than one 'primary' bean
+ found among candidates: [englishQualifierOpsImpl, marathiQualifierOpsImpl,
+  spanishQualifierOpsImpl]
+
+This is because since 2 beans are marked as @Primary the Spring Container is again
+confused with which bean is to be injected defeating the purpose of @Primary.
+So avoid using @Primary on 2 different beans having same parent type.
+
+- Now in the Controller class , use the @Qualifier annotation along with the @Autowired
+on the QualifierOps object. Pass the bean name as 'value' to the @Qualifier with the
+one that you want to inject. The name of the bean will by default be the name of the
+class in camelCase i.e TestClass will be testClass, MyFavVar will be myFavVar. The first
+letter will be lower case and rest all will be same. Invoke the API and check the result
+
+    @Autowired
+    @Qualifier("englishQualifierOpsImpl")
+    private QualifierOps qs;
+
+http://localhost:8080/hello -> Hello. Good Morning!!!. Specified implementation is
+provided.
+
+
+
