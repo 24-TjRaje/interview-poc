@@ -1,0 +1,86 @@
+Q. Write java code to test if number is prime
+
+1. A number is prime, if it has no other divisors other than 1 and itself
+
+2. Examples : 17, 23, 47 etc
+
+3. Basic Assumptions :
+
+- If a number is less than 1, thrown exception as number should be minimum 1;
+
+- If number is 1 return exception because one is neither prime nor composite
+
+- If number is less than four, it is surely prime return true
+
+4. Approach 1 :
+
+- Add the basic assumptions, create a loop from input to input/2 , because that will be
+last divisor before the input turns out prime. If completely divisible return true.
+For every iteration, increase value by i
+
+- If loop completed, return true outside the loop because if loop is completed means
+no divisors for that number is found
+
+- Implementation :
+
+public static boolean isPrime(int input) throws Exception {
+
+        if(input<=0)
+            throw new Exception("Number shouldnt be zero or negative");
+        if(input==1)
+            throw new Exception("1 is neither prime nor composite");
+        if(input<4)
+            return true;
+
+        for(int i = 2; i<= input/2; i++)
+            if(input % i == 0)
+                return false;
+        return true;
+    }
+
+5. Approach 2 :
+
+- Add all the base condition. A number can be represented as a product of its 2 divisors,
+where both divisors will be same in case of sqrt of that number
+
+16 = 2 * 8, 4 * 4, 8 * 2
+
+- Loop till the sqrt of number, because the lower divisor will give the same result
+as of higher divisor in the pair .
+
+2 * 8 == 8 *2
+
+- If input%i == 0 return false
+
+- If loop is completed, return true as no divisor found.
+
+- Implementation
+
+public static boolean isPrime2(int input) throws Exception {
+
+        if(input<=0)
+            throw new Exception("Number shouldnt be zero or negative");
+        if(input==1)
+            throw new Exception("1 is neither prime nor composite");
+        if(input<4)
+            return true;
+
+        for( int i = 2; i <= Math.sqrt(input); i++){
+            if(input%i == 0)
+                return false;
+        }
+        return true;
+    }
+
+6. Approach 3 : Inbuild method
+
+- Use Inbuild method of BigInter class called isProbablePrime() to get the result
+
+- isProbablePrime() takes an int argument called certainity factory between 1-10 both
+inclusive, which helps in increasing the accuracy of result where 10 is most accurate
+
+- Implementation :
+
+    public static boolean isPrimeInBuild(int input) {
+        return BigInteger.valueOf(input).isProbablePrime(10);
+    }
