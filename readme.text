@@ -1,0 +1,156 @@
+Q. Explain Shadow Cloning and Deep Cloning ?
+
+1. Cloning is a process of creating an exact copy of one object. It is achieved by
+implementing the Cloneable interface and overriding its clone() method.
+
+2. There are 2 types of Cloning : Shadow Cloning and Deep Cloning.
+
+3. Shadow Cloning :
+
+- Shadow Cloning is the most basic cloning.
+
+- In shadow cloning, only the first/root level fields of an object are cloned and
+for objects the reference to that object is copied and separate object is not created.
+
+- For Root fields, the updation for primitive of Wrapper classes type updation wont effect,
+the original object.
+
+- For Nested/Leaf fields(objects), the updation in primitive as well as Wrapper classes
+gets updated in original object, because reference of the nested object in cloned object
+is pointing to the object in original object
+
+- This basic implementation simply class the super class clone() method.
+
+- Implementation :
+
+public class Name implements Cloneable{
+
+    //assume getters, setters, all args constructor, toString method .
+    private int nameId;
+    private String firstName;
+    private String lastName;
+
+    @Override
+        public Name clone() {
+            try {
+                Name clone = (Name) super.clone();
+                return clone;
+            } catch (CloneNotSupportedException e) {
+                throw new AssertionError();
+            }
+        }
+}
+
+public class Student implements Cloneable {
+
+    //assume getters, setters, all args constructor, toString method .
+    private Integer id;
+    private Name name;
+    private boolean isPresent;
+
+    @Override
+    public Student clone() {
+        try {
+            Student clone = (Student) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+}
+
+public static void main(String[] args) throws CloneNotSupportedException {
+
+        //Input data setup
+        System.out.println("Clone demo");
+        Name nameS1 = new Name(22, "Tejas", "Raje");
+        Student s1 = new Student(1, nameS1, true);
+
+        //Shallow clones:
+
+        System.out.println("Original object s1 : " + s1);
+        Student s2 = (Student) s1.clone();
+        System.out.println("Clone object s2 : " + s2);
+
+        //Modifying values of clone object
+
+        s2.setId(10);
+        s2.setPresent(false);
+        s2.getName().setLastName("Wick");
+        s2.getName().setNameId(24);
+
+        System.out.println("After modifying clone object s2 with id 10 and lastName as Wick" +
+                "and prim. fields like nameId to 24 and isPresent to false");
+        System.out.println("Original object s1 : " + s1);
+        System.out.println("Clone object s2 : " + s2);
+}
+
+- Result :
+
+Clone demo
+Original object s1 : Student{id=1, name=Name{nameId=22, firstName='Tejas', lastName='Raje'}, isPresent=true}
+Clone object s2 : Student{id=1, name=Name{nameId=22, firstName='Tejas', lastName='Raje'}, isPresent=true}
+After modifying clone object s2 with id 10 and lastName as Wickand prim. fields like nameId to 24 and isPresent to false
+Original object s1 : Student{id=1, name=Name{nameId=24, firstName='Tejas', lastName='Wick'}, isPresent=true}
+Clone object s2 : Student{id=10, name=Name{nameId=24, firstName='Tejas', lastName='Wick'}, isPresent=false}
+
+- Benefits :
+
+- Faster as  it needs reference and no need to create new objects
+
+- Save memory
+
+- Useful for mutable objects
+
+4. Deep Cloning :
+
+- Deep cloning refers to creating a new object for the leaf/nested objects rather the
+reference itself.
+
+- By deep cloning, we return new object by copying all fields
+
+- Changes to the duplicate object wont impact the duplicate object as both are referencing
+to seperate objects.
+
+- Implementation :
+
+Override the clone methods in Name and Student classes
+
+public class Name {
+
+ @Override
+    public Name clone() {
+        Name clone = new Name(this.nameId, this.firstName, this.lastName);
+            return clone;
+    }
+
+}
+
+public class Student() {
+
+    @Override
+    public Student clone() {
+            Name name = this.getName().clone();
+            Student clone = new Student(this.id, name, this.isPresent);
+            return clone;
+    }
+
+}
+
+- Result :
+
+Clone demo
+Original object s1 : Student{id=1, name=Name{nameId=22, firstName='Tejas', lastName='Raje'}, isPresent=true}
+Clone object s2 : Student{id=1, name=Name{nameId=22, firstName='Tejas', lastName='Raje'}, isPresent=true}
+After modifying clone object s2 with id 10 and lastName as Wickand prim. fields like nameId to 24 and isPresent to false
+Original object s1 : Student{id=1, name=Name{nameId=22, firstName='Tejas', lastName='Raje'}, isPresent=true}
+Clone object s2 : Student{id=10, name=Name{nameId=24, firstName='Tejas', lastName='Wick'}, isPresent=false}
+
+- Benefit :
+
+- we get the most desired result has there wont be any collateral impact
+
+- Slower and memory consuming as objects needs to be created.
+
+- suitable for mutable objects.
