@@ -1,0 +1,30 @@
+Q. Write a code to find smallest number of Array A, which is not present in Array B. If none
+exists return -1.
+
+1. Approach 1 :
+
+- Convert the input arrays to Set's using IntStream to stream over the array. Use the boxed()
+method if IntStream to wrap primitive array to Object and collect it into a new HashSet
+collection. The idea to select set here is to eliminate duplicate elements
+
+- Use the Collection.disjoint(a, b), which returns true if both the passed collection
+have no element in common. If its true, return smallest element of a;
+
+- Stream over the collection a, use sorted() to  sort the stream, then use the filter()
+to filter out element which is not present in collection b. Use findFirst() to get first
+element if present or chain orElse(-1) to return -1 as mentioned in question.
+
+- Implementation:
+
+    public static Integer smallestCommon(int[] a, int[] b) {
+        Set<Integer> as = IntStream.of(a).boxed().collect(Collectors.toCollection(
+                HashSet::new));
+
+        Set<Integer> bs = IntStream.of(b).boxed().collect(Collectors.toCollection(
+                HashSet::new));
+
+        if(Collections.disjoint(as, bs))
+            return Collections.min(as);
+
+        return as.stream().sorted().filter(i-> !bs.contains(i)).findFirst().orElse(-1);
+    }
