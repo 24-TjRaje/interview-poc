@@ -1,0 +1,170 @@
+Q. Explain circular dependency in Spring.
+
+1. Circular dependency is a condition in Spring when one class requires a bean of
+another class and at the same time another class requires a bean of first class forming
+an infinite loop
+
+2. This results in exception, while starting up the application, because bean creation of
+class A requires bean B and bean creation of class B requires bean A leading into a 'race'
+or 'deadlock' condition where neither of the beans can be successfully created and injected
+into one another causing application to stop.
+
+3. Example :
+
+@Component
+public class ClassA {
+
+    @Autowired
+    private ClassB classB;
+
+    @Bean
+    public void helloMessageA() {
+        System.out.println("Hello from class A");
+    }
+}
+
+@Component
+public class ClassB {
+
+    @Autowired
+    private ClassA classA;
+
+    @Bean
+    public void helloMessageB() {
+        System.out.println("Hello from Class B");
+    }
+}
+
+- Here after starting the application, we get the below error message in the terminal
+
+Exception encountered during context initialization - cancelling refresh attempt:
+ org.springframework.beans.factory.UnsatisfiedDependencyException:
+  Error creating bean with name 'classA': Unsatisfied dependency expressed through
+   field 'classB': Error creating bean with name 'classB': Unsatisfied dependency
+    expressed through field 'classA': Error creating bean with name 'classA':
+     Requested bean is currently in creation: Is there an unresolvable circular reference?
+
+- This clearly states that there is a circular dependency in Class A and Class B causing
+application to stop
+
+- While using constructor injection, i.e declaring field and using Autowired at the constructor
+level, we get the below exception
+
+private ClassB classB;
+
+    @Autowired
+    public ClassA(ClassB classB) {
+        this.classB = classB;
+    }
+
+Exception encountered during context initialization - cancelling refresh attempt:
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with
+name 'classA' defined in file
+[C:\Users\tejasraje\Downloads\interview-poc\interview-poc\target\classes\com\interview\interview_poc\ClassA.class]:
+Unsatisfied dependency expressed through constructor parameter 0:
+Error creating bean with name 'classB' defined in file
+[C:\Users\tejasraje\Downloads\interview-poc\interview-poc\target\classes\com\interview\interview_poc\ClassB.class]:
+ Unsatisfied dependency expressed through constructor parameter 0:
+Error creating bean with name 'classA': Requested bean is currently in creation:
+Is there an unresolvable circular reference?
+
+4. Possible solutions :
+
+a. Using @Lazy :
+
+- @Lazy is an annotation which will create and inject the beans when they are really required
+and this process is called as Lazy initialisation.
+
+- At the time of bean initialisation, a proxy will be used to create the required bean, and
+when the need acquires that started bean will be fully initialised
+
+- @Lazy has only one attribute value of type boolean, which when set true (default)
+will perform lazy initialise and for false will do eager initialise which is default
+behaviour if you dont add @Lazy.
+
+- @Lazy can used with constructor injection of setter injection or field injection
+
+b. Using @PostConstruct:
+
+- @PostContruct is an annotation when annotated on a method, the method will get executed
+only once when all the fields are initialised and perform the required task
+
+- Create a method void init() and annotate it with @PostConstruct. In the implementation
+, use the dependent fields setter to set this class Bean to current object
+
+   @Autowired
+   private ClassC c;
+
+   @PostConstruct()
+   public void init() {
+    c.setD(this)
+   }
+
+5. Few Other ways :
+
+- Autowiring an instance of Type interface which is implemented by dependent class
+
+6. Implementation :
+
+package com.interview.interview_poc;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ClassA {
+
+//    @Autowired
+//    @Lazy
+    private ClassB classB;
+
+//    @Autowired
+//    public ClassA(@Lazy ClassB classB) {
+//        this.classB = classB;
+//    }
+
+
+    @Autowired
+    public void setClassB(@Lazy ClassB classB) {
+        this.classB = classB;
+    }
+
+    @Bean
+    public void helloMessageA() {
+        System.out.println("Hello from class A");
+    }
+}
+
+package com.interview.interview_poc;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ClassB {
+
+//    @Autowired
+//    @Lazy
+    private ClassA classA;
+
+//    @Autowired
+//    public ClassB(@Lazy ClassA classA) {
+//        this.classA = classA;
+//    }
+
+    @Autowired
+    public void setClassA(@Lazy ClassA classA) {
+        this.classA = classA;
+    }
+
+    @Bean
+    public void helloMessageB() {
+        System.out.println("Hello from Class B");
+    }
+}
+
+
