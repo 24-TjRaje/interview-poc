@@ -1,0 +1,153 @@
+Q. Explain what is @Autowired in Spring framework?
+
+1. @Autowired is an annotation in the spring framework which is used to inject a
+dependencies at runtime.
+
+2. It uses the Dependency Injection (DI) feature where the we dont create the required
+dependency bean. Instead, it uses Inversion Of Control (IoC) feature, where spring
+container manages and provides us the required dependencies
+
+3. @Autowired can either be used on a field, or on a Constructor or on a Setter method
+to automatically inject the needed dependency
+
+4. Field Injection :
+
+- Here the field is annotated with @Autowired and at runtime, the field dependency will
+be provided by Spring IoC Container
+
+- First, the constructor of the class will be invoked to create the bean and post that
+the dependency is injected at field
+
+5. Constructor Injection :
+
+- Here, we create a constructor with all the fields that are part of dependencies and
+are needed to be injected and initialise those fields. This constructor is to be annotated
+with @Autowired.
+
+- It ensures that the required dependencies are injected when this bean is getting created
+and is the most preferred option
+
+- We can have mutliple constructor of single class annotated with @Autowired, but
+this one that can fullfil maximum dependencies is chosen. If none can satisfy the
+dependecies, the default constructor is chosen
+
+6. Setter Injection :
+
+- Here we annotate a setter method with @Autowired to provide the dependency for that
+field
+
+- Dependency is injected once the bean is created
+
+7. The actual Dependency Injection is done BeanPostProcessor and BeanFactoryPostProcessor
+behind the scenes
+
+8. @Autowired on has one property: boolean required which tells whether the bean is required
+or not. Default value is true. If that bean is not found, there will BeanNotFoundException thrown
+. But if set to false and bean is not present, that field will simply set to null
+
+9. If you had multiple beans of same type, like an interface bean implemented
+by multiple classes and you try to inject interface bean, there will be bean ambiguity
+problem as Spring cannot decide for which implementation bean is to be injected
+
+10. In that case, mark one as the implementation class with @Primary, giving it highest
+priority and will be injected if nothing is specified.
+
+11. If you want to inject a specific Implementation bean use the @Qualifier(beanName).
+
+12. Implementation:
+
+public class ClassE {
+
+    public void message() {
+        System.out.println("I'm class E and not a bean class ");
+    }
+}
+
+@Component
+public class ClassD {
+
+    public void greet() {
+        System.out.println("I'm from class D and autowired via setter injection");
+    }
+}
+
+@Component
+public class ClassC {
+
+    public void greet() {
+        System.out.println("I'm from class C and I'm autowired via constructor injection");
+    }
+}
+
+@Component
+public class ClassB {
+
+    public void greet() {
+        System.out.println("I'm from Class B and autowired via field injection");
+    }
+}
+
+@Component
+public class ClassA {
+
+    @Autowired
+    private ClassB classB;
+
+    @Autowired(required = false)
+    private ClassE classE;
+
+    private ClassC classC;
+
+    private ClassD classD;
+
+    @Autowired
+    public ClassA(ClassC classC) {
+        this.classC = classC;
+    }
+
+    public void message() {
+        System.out.println("Hello from Class A");
+    }
+
+    public ClassB getClassB() {
+        return classB;
+    }
+
+    public ClassC getClassC() {
+        return classC;
+    }
+
+    public ClassD getClassD() {
+        return classD;
+    }
+
+    @Autowired
+    public void setClassD(ClassD classD) {
+        this.classD = classD;
+    }
+}
+
+@SpringBootApplication
+public class InterviewPocApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(InterviewPocApplication.class, args);
+	}
+
+	@Bean
+	public CommandLineRunner runField(ClassA a) {
+		return args -> {
+			a.message();
+			a.getClassB().greet();
+			a.getClassC().greet();
+			a.getClassD().greet();
+		};
+	}
+}
+
+- Result :
+
+Hello from Class A
+I'm from Class B and autowired via field injection
+I'm from class C and I'm autowired via constructor injection
+I'm from class D and autowired via setter injection
