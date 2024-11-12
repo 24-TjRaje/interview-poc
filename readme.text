@@ -1,0 +1,93 @@
+Q. Explain versioning and ways to implement versioning
+
+1. Versioning is a concept, where in we continously upgrade the our API's without
+modifying the current implementation.
+
+2. We create different versions of API's that do co exist together and the consumer
+can call any of these versions based on his preference
+
+3. It helps in supporting backward compatibility where system's using our API's cannot
+keep up with the new upgraded version and may break can keep consuming the older versions
+whereas other can consume the newer versions.
+
+4. There are 4 ways to achieve versioning:
+
+5. Path versioning :
+
+- for same API's, add version in the uri of the api handler :
+
+- examples :
+localhost:8080/greet/morning/v1 - invokes v1
+localhost:8080/greet/morning/v2 - invokes v2
+
+- most commonly used, easy to implement and understand
+
+6. Request Params :
+
+- On a single Handler, use request param to determine which version us to be invokes
+
+- Set a default value for param, which when param is absent will fall back to a default
+implementation
+
+- Example :
+
+localhost:8080/greet/afternoon?version=v10 - invokes with version 10
+localhost:8080/greet/afternoon - falls back to your default version, v1
+
+- uses query string which may make uri fussy
+
+7. Request Header :
+
+- On a single Handler, set Request Header to determine which version us to be invokes
+
+- Set a default value for param, which when param is absent will fall back to a default
+implementation
+
+- Example :
+
+localhost:8080/greet/evening : Header["version","10] - invokes the 10 th version
+localhost:8080/greet/evening - invokes the default version if setted up.
+
+- Set a default value for header, which when header is absent will fall back to a default
+implementation
+
+- clean but the consumer needs to know what header is to be passed
+
+8. Content Negotiation : using the Accept Header
+
+9. Implementation
+
+package com.interview.interview_poc;
+
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
+
+@RestController
+@RequestMapping("greet")
+public class VersioningController {
+
+    @GetMapping("/morning/v1")
+    public String greetMorningVersion1() {
+        return "Good Morning from Version v1";
+    }
+
+    @GetMapping("/morning/v2")
+    public String greetMorningVersion2() {
+        return "Good Day from Version v2";
+    }
+
+    @GetMapping("/afternoon")
+    public String greetAfternoon(@RequestParam(value="version", required = false, defaultValue = "v1")
+                               String version) {
+        return Objects.isNull(version) ? "Good Afternoon from " + version : "Good Noon from " + version;
+    }
+
+    @GetMapping("/evening")
+    public String greetEvening(@RequestHeader(value = "version", defaultValue = "v1", required = false)
+                               String version) {
+        return version == "v1" ? "Good Evening from " + version : "Evening delight from " + version;
+    }
+}
+
+
