@@ -1,0 +1,46 @@
+Q. Explain in detail : Pagination and Sorting in Spring Boot.
+
+1. Pagination is a concept in which we result a subset of results which is called as a
+page instead of sending the entire results
+
+2. It helps us to optimise the performance of the application, by reducing the response
+time as a subset of result is sent and next are sent when needed which also helps
+in reducing the memory utilisation.
+
+3. In Pagination, we define the Page Size : number of records in a particular page,
+Page Number : The number of page which you want
+
+4. Page in a Pagination has content, which has the actual data and other fields having
+metadata like total number of records available, total number of pages available, current
+page number, offset(set record of previous page), sort order applied etc
+
+5. Spring Data JPA uses the Pageable interface for the purpose of implementing pagination
+and the returned response is of type Page
+
+6. We create an Object of type Pageable by using PageRequest.of() which takes 4 params;
+pageSize, pageNumber, Sort object and Direction sortDirection. pageSize, pageNumber cannot be
+< 0. and if sorting is passed it cannot be null
+
+Pageable pageable = PageRequest.of(page, size, sort);
+
+7. Sorting is an concept where we sort the data based on a field/s in a order (ASC/DESC)
+
+8. For Sorting in Spring Data , we use the object of Sort and create this object, using the
+Sort.by() passing an object of Sort.Order which takes field name and sort direction.
+
+Sort sort = Sort.by(Sort.Order.asc("studentName"), Sort.Order.desc("classId"));
+
+instead of .by(), we can also pass asc('field') or desc('field')
+
+9. Implementation :
+
+    public Page<Student> getAllStudents(Integer pageNumber, Integer size) {
+        Pageable page = PageRequest.of(pageNumber, size);
+        return studentRepository.findAll(page);
+    }
+
+    public Page<Student> findByClassId(Integer classId, Integer pageSize, Integer pageNumber, String sortKey) {
+        Sort sortbj = Sort.by(Sort.Order.by(sortKey));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortbj);
+        return studentRepository.findByClassId(classId, pageable);
+    }
