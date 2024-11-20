@@ -1,0 +1,34 @@
+Q. How to create a springboot application from class.
+
+1. Prerequisites : Install JAVA and a MAVEN/GRADLE (build tool) which are compatible
+which each other. Install an IDE like IntelliJ or Eclipse for your development activities
+. Also install other tools like databases, caches, web servers etc that you will use
+in your application.
+
+2. Visit spring initializer, a online tool that provides us with basic springboot application
+structure to start with.
+
+- Select your tech stack like, Language ( JAVA/KOTLIN ) and its version. Build tool like
+MAVEN/GRADLE and its version.
+
+- Enter your project details, like project name, package name, artifact name, packaging
+type (jar/war/ear)
+
+- Add the dependencies that you want into your application like starter-web, starter-jpa,
+starter-actuator etc. They are placed in pom.xml file for MAVEN based project or
+build.gradle for GRADLE projects.
+
+- Generate the application, which will create a zipped folder having the base structure
+of your application which can run instantly
+
+3. Import the unzipped project into your IDE and add your logic files like services, entity,
+controllers etc.
+
+4. Provide your project configuration in application.properties/yaml
+
+5. Start the application, by running the file having @SpringBootApplication annotation,
+it is generally the file which is in the package name you provided and its name is
+similar to name of your application name.
+
+6. Check the application logs, you'll see a log line stating application started at
+port 8080 or your configured port.
