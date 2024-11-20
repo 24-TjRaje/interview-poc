@@ -1,0 +1,84 @@
+Q. Explain in detail, difference between monolithic and microservice application
+
+1. Definition:
+
+- Monolithic : Monolithic application is the an application where all the different components are
+placed and structured into a single large standalone codebase that forms the application
+
+- Microservices : Microservice application is an application where the application is structured in
+such a way that different components are placed in their different codebase and broken down into
+smaller applications.
+
+2. Codebase :
+
+- Monolithic : There is a single, large and unified codebase which has all the components.
+
+- Microservices : The codebase is spread across different repositories where each component has its
+own codebase
+
+3. Technology Stack :
+
+- Monolithic : Since, there is a single codebase, it strictly has to use a single predefined
+tech stack
+
+- Microservices : Components have their own codebases which can be independently developed using
+different tech stacks
+
+4. Scalability :
+
+- Monolithic : As the application is standalone, the entire application gets scaled together
+
+- Microservices : Here, the components can be scaled independently based on the incoming request
+rather than scaling all components
+
+5. Deployment :
+
+- Monolithic : Here the entire application is deployed as a single unit
+
+- Microservices : Application are deployed separately for each components
+
+6. Fault Tolerance :
+
+- Monolithic : If any part of the application crashes, then the application will crash as
+it components are dependent on each other and are tightly coupled.
+
+- Microservices : Failure of one component can be graceful handled in such a way that other
+component applications wont get effected.
+
+7. Maintenance :
+
+- Monolithic : As the application group, the code base also grows and its gets difficult to
+maintain
+
+- Microservices : As the application grows, we can add different components to their separate
+codebases so that they can be maintained separately.
+
+8. Traceability :
+
+- Monolithic : It is a single code base, so we can easily debug the application to check for issues
+. So it has good traceability.
+
+- Microservices : Application is spread across different code base, so debugging an issue is
+difficult as we have to jump across code bases resulting in low traceability
+
+9. Coupling :
+
+- Monolithic : Tightly coupled as all components as together and dependent on each other
+
+- Microservices : Loosely coupled as they are isolated and wont get affected if any other component
+changes
+
+10. Advantages :
+
+- Monolithic : Faster development, easy to deploy, easy to debug
+
+- Microservices : Scalability, tech stack flexibility, fault tolerance
+
+11. Disadvantages :
+
+- Monolithic : Low flexibility and scaling, no fault-tolerance, difficult to maintain
+
+- Microservices : Difficult to trace, complex deployments, communication overhead between components
+
+
+
