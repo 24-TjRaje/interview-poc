@@ -1,0 +1,84 @@
+Q. Explain difference between @Controller and @RestController
+
+1. We will differentiating @Controller and @RestController on few parameters.
+
+a. Purpose :
+
+- @Controller - This class level annotation is used to define http handler methods to handle
+http requests and return appropriate view or data.
+
+- @RestController - This class level annotation is used to define handler methods to handle
+http requests and return data
+
+b. Composition :
+
+- @Controller - It composes of @Controller annotation itself
+
+- @RestController - It composes of @Controller and @ResponseBody -> which is used to
+return raw data based on data response type like XML, JSON etc.
+
+c. Return Type :
+
+- @Controller - It can either return a view ( jsp or html page) or data (plain text/
+json/xml). In order to return data, all the handler methods that want to return data
+needs to annotated with @ResponseBody individually.
+
+- @RestController - It strictly returns data of any response type and methods dont
+need to explicitly mention @ResponseBody because it is already placed at class level
+added to all the defined handler methods
+
+d. Use case :
+
+- @Controller - Used in Web Applications that returns UI
+
+- @RestController - Used to create REST web service.
+
+e. View Resolver :
+
+- @Controller - Needs a view resolver because the handler method returns the name of
+view which is stored in resources/templates directory and then view resolver fetches the
+.html or .jsp page and returns it as response. We need to explicitly add the thymleaf
+dependency here as it acts as template engine here
+
+- @RestController - Doesnt need view resolver, as it never returns a view, but returns
+raw data.
+
+2. Implementation :
+
+@Controller
+@RequestMapping("/controller")
+public class AllControllers {
+
+    @GetMapping("/html")
+    public String greetPage() {
+        return "goodMorning";
+    }
+
+    @GetMapping("/data")
+    @ResponseBody
+    public String greetData() {
+        return "Good Morning from All Controller data endpoint";
+    }
+}
+
+@RestController
+@RequestMapping("rest-controller")
+public class AllRestController {
+
+    @GetMapping("data")
+    public String greetRestData() {
+        return "Hello from data endpoint of AllRestController";
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Good Morning</title>
+</head>
+<body>
+    Good Morning from AllController Class html endpoint!!!
+</body>
+</html>
+
