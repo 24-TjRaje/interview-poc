@@ -1,0 +1,34 @@
+Q. Explain difference between @PutMapping and @PatchMapping
+
+1. Http Method Type :
+
+- @PutMapping : The Http Method used here is PUT.
+
+- @PatchMapping : The Http Method used here is PATCH
+
+2. Use cases :
+
+- @PutMapping : Used for completely update a resource with all fields or provide a new version
+
+- @PatchMapping : Used for partial/selective update where we only modify a selected fields of a
+resource.
+
+3. Request Body :
+
+- @PutMapping : We provide the entire request body that is to be updated for a resource
+
+- @PatchMapping : We send field/s that are to be updated along side resource id.
+
+4. Idempotent : same requests will return same response
+
+- @PutMapping : YES if there are no dynamic fields in resource like timestamp.
+
+- @PatchMapping :YES if there are no dynamic fields in resource like timestamp.
+
+5. Create if not exists ?
+
+- @PutMapping : Possible, depends on implementation because we have the entire body to create a
+resource
+
+- @PatchMapping : Possible only when there is no field validations on null fields as we have only
+limited fields.
