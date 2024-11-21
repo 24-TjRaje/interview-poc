@@ -1,0 +1,57 @@
+Q. Explain the difference between Spring Boot and Spring MVC
+
+1. Purpose  :
+
+- Spring Boot : Used to quickly build and run web applications by taking advantage of auto configurations
+to setup and configure the application.
+
+- Spring MVC : Used to create traditional web applications or RESTful API's by following Model-View-
+Controller pattern where model represents the data and business layer, View represents the UI layer
+and Controller acts as a mediator between Model and View to route incoming Http requests from
+View to appropriate handlers in the controllers and collaterally to the model. Features -
+Dispatcher Servlet, View Resolver, Handler Mappings, Form Handling, Interceptors
+
+2. Configuration  :
+
+- Spring Boot : Doesnt require a lot of manual configuration due to spring boot's autoconfiguration
+feature which configures components based on present dependencies. Features - Auto Configuration,
+Dependency Management, Starter Projects
+
+- Spring MVC : Requires a lot of configuration and boiler plate code to setup the application.
+
+3. Web Server :
+
+- Spring Boot : Comes with embedded web server like Jetty, Tomcat, Undertow etc.
+
+- Spring MVC : Need to manually configure an external web server.
+
+4. Dependency Management  :
+
+- Spring Boot : Relies on pom.xml or build.gradle to declare and manage dependencies
+
+- Spring MVC : Relies on Spring configuration files application-context.xml or dispatcher-servlet
+.xml (XML based configuration)
+
+5. Deployment :
+
+- Spring Boot : Can be packaged as .WAR or .JAR or. EAR and deployed on embedded web server
+
+- Spring MVC : Is packaged as .WAR and deployed on external web server
+
+6. Development Speed  :
+
+- Spring Boot : Faster, due to starter dependencies and auto configuration feature
+
+- Spring MVC : Slower, due to manual configuration of components and boiler plate codes
+
+7. Application properties  :
+
+- Spring Boot : Uses application.properties/yaml for local or external configuration.
+
+- Spring MVC : Used property based or XML based local configurations
+
+8. Quick Start Options  :
+
+- Spring Boot : Has Spring Initializer to quickly create a skeleton project to build and run
+
+- Spring MVC : No such tool available.
