@@ -1,0 +1,50 @@
+Q. Compare Runnable and Callable.
+
+1. Purpose  :
+
+- Runnable : It is a functional interface which is used to execute some task concurrently on a thread
+
+- Callable : It is a functional interface which is used to execute some task concurrently on a thread
+
+2. Defined Method :
+
+- Runnable : It has a method called void run()
+
+- Callable : It has a method called T call()
+
+3. Return Type :
+
+- Runnable : Its has void return type and returns nothing (A consumer type Functional Interface)
+
+- Callable : It can have any return type including null (A supplier type Functional Interface)
+
+4. Compatible with :
+
+- Runnable : Highly compatible with Executor Interface as it is passed argument to its submit()
+
+- Callable : Highly compatible with ExecutorService Interface as its overriden submit() accepts Callable argument
+
+5. Simplicity :
+
+- Runnable : More simple and basic than Callable
+
+- Callable : More complex and advanced than Runnable
+
+6. Exception Handling :
+
+- Runnable : Cannot throw checked exception and exception handling
+
+- Callable : Can throw checked exception and exception handling
+
+7. Use Case:
+
+- Runnable : Used when you want to run task concurrently but results dont matter
+
+- Callable : Used when you want to run tasks concurrently but results matter
+
+8. Since :
+
+- Runnable : JAVA 1.0
+
+- Callable : JAVA 1.5
+
