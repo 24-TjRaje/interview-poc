@@ -1,0 +1,225 @@
+Q. Explain executor framework.
+
+1. Executor framework provides us classes, interfaces that help to achieve parallelism/concurrency
+without the need of explicitly creating and managing the threads and helping in better management
+of concurrent task
+
+2. It is a part of java.concurrent package and was introduced in Java 5
+
+3. Why Executor framework ?
+
+- Automatic thread creation and lifecycle management.
+
+- Thread sharing from thread pool instead of creating new threads improving resource utilisation
+
+- Inbuild support for task scheduling
+
+4. Executor interface :
+
+- This is the main component of Executor framework to achieve parallelism
+
+- It provides us a method execute(), which accepts a runnable object defining the task that is
+to be executed by a thread managed by thread pool asynchronously and has a return type of void.
+
+- the tasks ran by the execute() are asynchronous in nature as they are executed on seperate threads
+without blocking the calling thread
+
+- here in submit(), we cannot retrieve the result of running tasks or handle execptions
+
+5. ExecutorService interface :
+
+- This interface is an extension of Executor and AutoCloseable interface providing basic functionality of submitting
+task via Executor interface along with its own additional feature like retrieving task results,
+cancelling tasks and task scheduling tasks
+
+- Unlike the execute() method of Executor interface which only accepts a Runnable object,
+here we can also provide a Callable object which can retrieve the results and handle results
+
+- here submit method returns a Future object that is helpful in checking checking task status,
+task cancellation and retrieval of results.
+
+- Future<T> submit(Runnable object, Result<T> s)
+Executes the task submitted via Runnable object and returns an Future object of type Result
+
+- Future<T> submit(Runnable object)
+Executes the task submitted via Runnable object and returns an Future object with value null
+
+- Future<T> submit(Callable object)
+Executes the task submitted via Callable object and returns an Future object of type Result
+
+- List<Future<T>> invokeAll(List<Callable<T>> list)
+Executes all the callable task submitted and returns list of future for result of tasks
+
+- List<Future<T>> invokeAll(List<Callable<T>> list, int timeoutDuration, TimeUnit timeUnit)
+Executes all the callable task submitted and returns list of future for result of tasks that
+are successfully executed before the provided timeframe duration. If not all tasks are executed
+before timeout, they are cancelled and TaskCancellation Exception is thrown. Only tasks whose
+future objects isDone() is true are said to be successfull.
+
+- T invokeAny(List<Callable<T> tasks):
+Executes all the tasks provided and returns result of one task that is successful. Throws Execution
+Exception if none succeeds
+
+- T invokeAny(List<Callable<T> tasks, int timeout, TimeUnit unit):
+Executes all the tasks provided and returns result of one task that is successful before timeout occurs
+Throws ExecutionException if none succeeds. tasks not completed before timeout are cancelled
+
+- void close()
+Initiates shutdown by terminating executor. Tasks before initialisation will be completed, but no
+new tasks will be submitted. It waits for all acceppted tasks to complete execution.
+Introduced in JAVA 19
+
+- void shutdown()
+Initiates shutdown by terminating executor. Tasks before initialisation will be completed, but no
+new tasks will be submitted. It doesnt waits for all acceppted tasks to complete execution.
+
+- List<Callable<T>> shutdownNow()
+Instantly shutdowns down executor and returns list of task that never started and terminates
+active tasks instantly without waiting for their execution completion
+
+- boolean isShutDown()
+Return true if executor has been shutdown and vice versa
+
+- boolean isTerminated()
+Returns true if all tasks are completed before shutdown and vice versa
+
+- boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException;
+Blocks the executor shutdown until all tasks are completed or the timeout is elapsed or it
+interrupted
+
+6. ScheduledExecutorService :
+
+- It is a sub interface of ExecutorService and has concrete implementation class called
+ScheduledThreadExecutorService present in package java.concurrent introduced in JAVA 5
+
+- It is used to execute tasks parallely but especially to execute them after a fixed delay
+or time interval
+
+- TimeUnit can never be null
+
+- ScheduledFuture<V> schedule(Runnable r, long delay, TimeUnit unit)
+Executes the provided task after the given duration, the get() of scheduledFuture
+will always be null due to Runnable instance.
+
+- ScheduledFuture<V> schedule(Callable<V> r, long delay, TimeUnit unit)
+Executes the provided task after the given duration, the get() of scheduledFuture
+will return the result returned by Callable.call() implementation.
+
+- ScheduledFuture<V> scheduleAtFixedRate(Runnable r,long initialDelay, long delay, TimeUnit unit)
+Executes the task after fixed delay where the first execution occurs after initial Delay
+
+- ScheduledFuture<V> scheduleWithFixedDelay(Runnable r,long initialDelay, long delay, TimeUnit unit)
+Submits a periodic action that becomes enabled first after the given initial delay, and subsequently
+ with the given delay between the termination of one execution and the commencement of the next.
+
+7. ThreadPoolExecutor Class
+
+- Concrete implementation class of ExecutorService and part of java.concurrent package
+
+- Manages a pool and threads and tries to schedule tasks onto them
+
+- corePoolSize : min no. of thread to be kept in the pool at any given time even if they are idle,
+if size goes below min. size new thread is created and added to the pool till maxPoolSize
+
+- maxPoolSize : max no. of thread that can be kept in a pool at given time
+
+-keepAliveTime : an idle duration for thread after which they will be killed from the pool to
+release resources. The deletion willonly happen till corePoolSize
+
+- workQueue : used to hold only Runnable task. It can be a blocking queue
+ (like LinkedBlockingQueue or ArrayBlockingQueue) that stores tasks to be executed by the available
+  threads.
+
+- ThreadFactory : to create new threads, we can create our own Thread factory as well
+
+- RejectedExecutionHandler : handles tasks that cannot be completed
+
+- Constructor :
+
+public ThreadPoolExecutor(
+    int corePoolSize,
+    int maximumPoolSize,
+    long keepAliveTime,
+    TimeUnit unit,
+    BlockingQueue<Runnable> workQueue,
+    ThreadFactory threadFactory,
+    RejectedExecutionHandler handler);
+
+- void execute(Runnable r)
+executes the provided task on a thread in thread pool
+
+- Future<V> submit(Callable<V> call)
+execute the provided callable task and return future object of type v in result
+
+- Future<V> submit(Runnable call, Result v)
+execute the provided callable task and return future object of value null
+
+- int getPoolSize()
+give current pool size
+
+- int getCorePoolSize()
+give minimum pool size
+
+- int getMaxPoolSize()
+give max pool size
+
+9. Executors class:
+
+- Provides factory methods that return ExecutorService instance for various implementation classes
+of ExecutorService
+
+- ExecutorService newCachedThreadPool()
+creates threadpool that groups dynamically between coreSize and maxSize where threads are dynamically
+created based on tasks and are killed when they are ideal for more than 60 secs and these threads are
+reused if needed
+
+- ExecutorService newFixedThreadPool(int nThreads)
+creates a thread pool which has provided mnumber of threads at any given time and these threads will
+be used recursively for incoming tasks. If tasks exceeds number of threads, the tasks will be placed
+in the waiting queue and will be executed once the threads are available
+
+- ScheduledExecutorService newScheduledThreadPool(int corePoolSize)
+  This method creates a thread pool that supports scheduled tasks. It allows you to schedule tasks
+with fixed-rate or fixed-delay executions. This is useful for tasks that need to run at
+regular intervals (e.g., background maintenance tasks, time-based retries).
+
+10. Runnable Interface
+
+- The Runnable interface represents a task that can be executed asynchronously.
+
+- It doesn't return any result or throw checked exceptions.
+
+- It is the most commonly used interface for tasks that don't need to return a result.
+
+- public interface Runnable {
+      void run();
+  }
+
+11. Callable Interface
+
+- The Callable interface represents a task that can be executed asynchronously.
+
+- Unlike Runnable, a Callable can return a result and throw checked exceptions.
+
+- It is typically used when you need to compute a result asynchronously.
+
+- public interface Callable<V> {
+    V call() throws Exception;
+}
+
+12. Future interface
+
+- The Future interface represents the result of an asynchronous computation.
+
+- It provides methods to check if the task is complete, retrieve the result, or cancel the task.
+
+- get(): Retrieves the result of the task.
+- cancel(): Attempts to cancel the task.
+- isDone(): Checks if the task has completed.
+
+13. Advantages of Using the Executor Framework
+
+- Thread Management: You no longer need to manually create and manage threads, as the framework handles it for you.
+- Task Scheduling: It provides built-in support for scheduling tasks with fixed-rate or fixed-delay execution.
+- Resource Management: It efficiently manages the number of threads to optimize performance.
+- Graceful Shutdown: Executors can be shut down gracefully, ensuring that all tasks finish execution before the program exits.
