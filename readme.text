@@ -1,0 +1,41 @@
+Q. Compare Executor and Executor Service
+
+1. Description :
+
+- Executor : It is a interface and the backbone for the entire Executor framework which helps
+in thread creation, management and resource cleanups to achieve concurrency
+
+- Executor Service : It is a interface in Executor framework which has all the capabilities of
+executor interface plus ability to stop, schedule tasks, return results etc.
+
+2. Hierarchy :
+
+- Executor : It is the parent interface of ExecutorService
+
+- ExecutorService : It is child interface of Executor
+
+3. Method :
+
+-  Executor : It is a functional interface having having a single method execute(), which is used to
+run tasks concurrently
+
+- ExecutorService : It has many method but its submit() method is used to submit task for parallel
+execution
+
+4. Input :
+
+- Executor : Its execute() only accepts Runnable as argument
+
+- ExecutorService : Its submit() can accept both Runnable and Callable as argument
+
+5. Usage :
+
+- Executor : Easy to use and basic concurrent where no result will be returned
+
+- ExecutorService : Complex but more advance concurrency can be achieved where results are returned
+
+6. Task execution Control:
+
+- Executor : No methods to control the task flow
+
+- ExecutorService : Has methods like cancel(), shutdown() to control task flow
