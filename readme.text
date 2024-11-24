@@ -1,0 +1,116 @@
+Q. Explain different HTTP status codes.
+
+1. There are 5 different series of 5 Http status codes :
+
+- INFORMATIONAL : starts with '1xx' . It tells that the server has recieved the request and
+currently is in the processing stage
+
+- SUCCESSFUL : starts with '2xx'. It tells that the server has recieved, understood and
+accepted the request successfully
+
+- REDIRECTION : starts with '3xx'. It tells that the server needs further action from client
+to fullfill the request or it generally redirects the request to a different URL
+
+- CLIENT_ERROR : starts with '4xx'. It tells that there is some error in the client request
+
+- SERVER_ERROR : starts with '5xx'. It tells that server failed to process a valid request
+
+2. INFORMATIONAL status codes : 1xx
+
+- 100 : Continue
+Indicates request is partially received by the server and will get the final response
+from the server when it receives complete request and processing it
+
+- 101 : Switching Protocols
+Indicates that the server has received and understood the client request and will act upon it
+by changing the protocol
+
+- 102 : Processing
+Indicates that server is currently processing the client request and doesnt have the response yet
+
+3. SUCCESSFUL status codes : 2xx
+
+- 200 : OK
+Indicates that the request has been successfully executed and the response contains the requested
+resource
+
+- 201 : CREATED
+Indicates that the request has been successful and new resource has been created on the server
+
+- 202 : ACCEPTED
+Indicates that the request the successfully accepeted by the server and it'll be processed used
+. Used in case of async requests
+
+- 203 : NON_AUTHORITATIVE_INFORMATION
+Indicates that the request is successfully recieved by the server, but response has meta data
+from a third-party/proxy server. Used in case, when response returned from cache server
+
+- 204 : NO_CONTENT
+Indicates that the request is successfully processed, but no response is returned. Used in the
+case of DELETE request
+
+- 205 : RESET_CONTENT
+Indicates that the request is successfully processed by the server, but client needs to refresh
+the form/document. Used in the case of successful form submission
+
+- 206 : PARTIAL_CONTENT
+Indicates that the request is successfully processed by the server and returned response is only
+a part of the entire response. Used in the case of multipart downloads
+
+4. REDIRECTION status codes : 3xx
+
+- 300 : MULTIPLE_CHOICES
+Indicates response has multiple responses and the client can choose any of them by following
+the provided link in response
+
+- 301 : MOVED_PERMANENTLY
+Indicates the resource is moved to a new url and the new url is stored in the Location header
+of response
+
+- 302 : FOUND
+Indicates that the resource is temporarily moved to a new location, but this location is to
+be used in the future request. The new location is sent in the Location header of response
+
+- 303 : SEE_OTHER
+Indicates that the server wants to client to retrieve the resource from another url which is
+sent in the Location header of the response
+
+- 304 : NOT_MODIFIED
+Indicates that the resource is not modified since its last invocation and client can continue to
+use the cached response
+
+- 307 : TEMPORARY_REDIRECT
+Same as FOUND - 302, but the client should not modify the request while hitting the new server
+
+- 308 : PERMANENT_REDIRECT
+Same as MOVED_PERMANENTLY - 301, but the client should not modify the request while hitting the
+ new server
+
+5. CLIENT_ERROR status codes : 4xx
+
+- 400 : BAD_REQUEST
+Indicates the request provided by client has invalid data
+
+- 401 : UNAUTHORIZED
+Indicates that request is unauthorised has client hasnt provided the credentials or are invalid
+
+- 403 : FORBIDDEN
+Indicates server understood the request, but client has not authority to access this resource
+
+- 404 : NOT_FOUND
+Indicates that the requested resource is not found on the server
+
+- 405 : METHOD_NOT_ALLOWED
+Indicates http method used by the client is not allowed/correct for the requested resource
+
+- 408 : REQUEST_TIMEOUT
+Indicates client took too much time to sent the request so server has timeout for waiting for
+client request
+
+6. SERVER_ERROR status codes : 5xx
+
+- 500 : INTERNAL_SERVER_ERROR
+Indicates that something went wromg at the server side, but not sure what is the issue
+
+- 503 : SERVICE_UNAVAILABLE
+Indicates that the server is currently unavailable due to mantainence or is under load
