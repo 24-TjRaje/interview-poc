@@ -1,0 +1,48 @@
+Q. How to create a thread pool with fixed size
+
+1. Using the factory method of Executors class
+
+- Executors.newFixedThreadPool(int n) is a factory/static method return a thread pool or provided
+size n.
+
+- It internally calls the new ThreadPoolExecutor(), to create the thread pool with ease and helps in
+reducing errors while creating ThreadPoolExecutor due to constructor arguments
+
+2. Using the ThreadPoolExecutor constructor.
+
+- We use the ThreadPoolExecutor which takes at least five args; corePoolSize(min threads),
+maxPoolSize(max thread), timeout(time-to-live before idle threads are killed), TimeUnit
+(time unit for timeout), LinkedBlockingQueue/List (Holding tasks that are waiting for execution)
+
+- Difficult approach to remember the constructor args
+
+3. Implementation
+
+package com.interview.interview_poc;
+
+import java.util.concurrent.*;
+
+public class FixedThreadPoolDemo {
+
+    public static void main(String[] args) {
+
+        ThreadPoolExecutor tpe = new ThreadPoolExecutor(3,3,3, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>());
+
+        System.out.println("Max pool size is " + tpe.getMaximumPoolSize());
+        System.out.println("Current pool size is " + tpe.getPoolSize());
+        System.out.println("Min pool size is " + tpe.getCorePoolSize());
+
+        ExecutorService tse = Executors.newFixedThreadPool(2);
+
+        for(int i=0; i<15; i++)
+            tpe.submit(() -> System.out.println("Hello Executor Service from " + Thread.currentThread().getName()));
+
+        for(int i=0; i<13; i++)
+            tse.submit(() -> System.out.println("Hello Thread Pool Executor from " + Thread.currentThread().getName()));
+
+        tpe.shutdown();
+        tse.shutdown();
+    }
+
+}
