@@ -1,0 +1,113 @@
+Q. Explain cacheable interfaces <<Question Number - 134 , Date : 25-11-24>>
+
+1. Cacheable interfaces are a design pattern in which we place the expensive or frequently accessed
+operations in an interface and provide an implementation for the interface with caching abilities.
+It helps to improve the performance of application, by reducing response time as the data is fetched
+from cache and will go to the database if it is not present in cache. Also it helps to reduce
+frequent db hits which is considered as expensive operation in software design.
+
+2. Concepts of Cacheable Interface
+
+- Cache : A place in the memory which stores the frequently access data
+
+- Cache Hit : An scenario where the requested data is found in cached and returned to the client
+
+- Cache Miss : A scenario where the requested data is not found in cached but is fetched from the
+database itself and then stored in cache for next requests
+
+- Cache Invalidation : A operation where after a certain duration, the data from the cache is
+deleted and invalidate to fill fresh and updated data
+
+- Cache Key : An unique key which is reference to a field/data stored in the cache which is used
+to retrieve the cached data. It is generally the field against which data is queried
+
+3. Properties of Cacheable Interface
+
+- Deterministic Result/Idempotent : Same input should return the same response everytime.
+
+- Time-To-Live : A time after which the cache is cleared so that stale results are not served
+
+- Thread safety : Placing caches in a thread safe manner to avoid inconsistency due to concurrent
+access and race conditions
+
+- Cache size : Determining how much data is to be stored in cache
+
+4. Realtime Cache Libraries : Guave Cache, EhCached, Redis(Most popular), Memcached.
+
+5. Sample Implementation:
+
+public class Person {
+
+    private Integer id;
+    private String name;
+}
+
+public interface CacheableDemoInterface {
+
+    public Person getDataById(Integer id);
+}
+
+@Service
+public class CacheableDemoInterfaceImpl implements CacheableDemoInterface {
+
+    public static List<Person> data = new ArrayList<>();
+
+    static {
+        data.add(new Person(4, "John"));
+        data.add(new Person(5, "Jason"));
+        data.add(new Person(8, "Ethan"));
+        data.add(new Person(26, "James"));
+        data.add(new Person(3, "Bruce"));
+    }
+    @Override
+    public Person getDataById(Integer id) {
+        return data.stream().filter(i -> Objects.equals(i.getId(), id)).findFirst().orElse(null);
+    }
+}
+
+@Component
+public class SampleCacheClass {
+
+    @Autowired
+    private CacheableDemoInterfaceImpl cdi;
+
+    private Map<Integer, Person> idCache = new HashMap<>();
+
+    public Person getCachedIdResult(Integer id) {
+        if(idCache.containsKey(id)) {
+            System.out.println("Data fetched from cache for id : " + id);
+            return idCache.get(id);
+        }
+        else {
+            System.out.println("Data fetched from service and saved to cache for id : " + id);
+            Person p = cdi.getDataById(id);
+            idCache.put(id, p);
+            return p;
+        }
+    }
+
+    public void clearCache() {
+        System.out.println("clearing cache.....");
+        idCache.clear();
+    }
+
+}
+
+@RestController
+@RequestMapping("/person")
+public class CacheController {
+
+    @Autowired
+    private SampleCacheClass sci;
+
+    @GetMapping("/{id}")
+    public Person getPersonById(@PathVariable Integer id) {
+        return sci.getCachedIdResult(id);
+    }
+
+    @GetMapping("/clear")
+    public void clearCache() {
+         sci.clearCache();
+    }
+
+}
