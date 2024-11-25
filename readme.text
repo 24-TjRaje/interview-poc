@@ -1,0 +1,69 @@
+Q. Explain the S.O.L.I.D principle?
+
+1. SOLID principles is a set of 5 rules used in combination with OOP which helps the developers to
+make their code easy to implement, understand and modify while making the code more secure, flexible
+and scalable
+
+2. These 5 principles are :
+
+- S : Single Responsibility Principle
+- O : Open Closed Principle
+- L : Liskov's Substitution Principle
+- I : Interface Segregation Principle
+- D : Dependency Inversion Principle
+
+3. Single Responsibility Principle .
+
+- It states that a single class should only be responsible in handling a single task
+
+- Classes having more than one responsibility , makes them complex as they keep growing
+
+4. Open Closed Principle.
+
+- It states that the components should be open for extension, but should be closed for modification.
+
+- Classes should extend the another class and create their own version of methods if needed instead
+of modifying the original class.
+
+- Create an interface with the methods and let classes implement them so that the no modification
+happens
+
+5. Liskov's Substitution principle.
+
+- Child's should be able to fully substitute its Parent classes
+
+- Meaning create an interface with simple methods that are common to all its childs in that way
+they can act a complete substitute for parent
+
+- Example : In parent class Birds, we have a method fly , so Eagle can fly by hen cannot fly
+So Hen cannot be a substitute for Bird
+
+- So here instead of fly declare method move as birds can move in several ways like walk, fly, swim
+etc
+
+6. Interface Segregation :
+
+- Do not create interface is such a way that its clients are forced to implement unnecessary features
+
+- Suppose we have a Interface Car with methods like start, fill feul, charge etc. Now if this
+interface is implemented by an Electric Car, then the fill feul method is useless for it and for
+an implementation class Petrol/CNG , charge method is unnecessary
+
+- Instead create 3 different interfaces BasicFeature, ElectricFeature and FuelFeature and let
+the cars decide which interface they want to implement
+
+7. Dependency Inversion principle:
+
+- High level modules should not be dependent on low level modules
+
+- It says that instead of injecting concrete class object and create tight dependency, use an
+interface type to loose coupling and flexibitity
+
+- Imagine you have three classes, Payment, UPI and Cash. Here payment is done via UPA and has
+an dependency object into it. So when we make the payment we are bound to use the UPI reducing
+flexibility as we cannot use other options and tight coupling as new UPI object is explicitily used
+
+- Instead we create PaymentOption interface, where both Cash and UPI would their task in the
+payment method and in the Payment class we will put the Field of type PaymentOption which
+will give us the flexibility to use any sort of Implementation of PaymentOption we want.
+
