@@ -1,0 +1,22 @@
+Q. Explain in detail, concurrent HashMap
+
+1. ConcurrentHashMap is a part of java.util.concurrent package is was introduced in Java 1.5
+
+2. It provides us with a Thread Safe instance of traditional HashMap which has all the operations
+of HashMap as well
+
+3. It is used to handle concurrent access/updates by multiple threads on a HashMap instance  in a
+more efficient manner that Synchronized HashMap or HashTable
+
+4. ConcurrentHashMap, while providing concurrent access to a thread, doesnt let the entire map
+to be blocked by a particular thread. Instead , here we have a "Segment Based Blocking" where the
+entire HashMap gets divided into smaller segment which are same as a Bucket in HashMap.
+
+5. So the thread will only block a particular segment/buckets while put operation and not the
+entire HashMap instance. At the same time, while the update is being performed, either can perform
+the read operation on that very segment by other threads. Once the put operation is completed, the
+reading threads will get the new value.
+
+6. Unlike HashMap, which allows null keys and values, the ConcurrentHashMap doesnt allow null
+keys/values just like legacy HashTable. If we try to add null key/value, we will get Null Pointer
+Exception
