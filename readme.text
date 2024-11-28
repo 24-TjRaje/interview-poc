@@ -1,0 +1,47 @@
+Q. Explain @Lazy and @Fetch
+
+1. @Lazy :
+
+- This annotation is used to lazily create and load the bean only when it is needed or injected
+
+- Can be used with both class level beans ( @Component, @Service etc.) or method level beans
+(@Bean)
+
+- For @Configuration and @Bean both have @Lazy and class has set value to true sating lazy load and bean sets value
+to false stating eager load, in such a case @Bean will always take priority (default value is true)
+
+- @EnableLazyInitialization is annotation that can be put at the @SpringBootApplication and will make sure that
+all the beans created by this application are lazily loaded.
+
+- Advantage :
+
+= Saves up resources : Since beans only loaded when needed, it saves a lot of memory
+
+= Resolves circular dependency : We can mark one bean as @Lazy, so that we can create one bean and use its context in
+another when @Autowired is used to inject dependency
+
+= Improves boot up speed : Since not all beans will be created, we can quickly boot up the application
+
+2. @Fetch :
+
+- This annotation is a Hibernate/JPA related annotation which decides a strategy to be used while retrieving data
+of related entity
+
+- We have 2 fetching strategy : FetchType.LAZY ( Loads the child entity only when accessed in parent) and
+FetchType.EARLY ( Fetches the child entity as soon as parent entity is retrieved) which are specified in the
+relationship annotation like @OneToOne in  a property called 'fetch'
+
+- @Fetch allows use to get more control over the fetch strategy than the fetch property specified in
+relationship
+
+- This annotations take FetchMode as argument and there are 3 FetchMode defined
+
+- FetchMode.SELECT : will fire individual select queries to retrieve the child entity
+
+- FetchMode.JOIN : will use a join query to retrieve the data
+
+- FetchMode.SUBSELECT : will use a subquery to retrieve the data
+
+
+-
+
