@@ -1,0 +1,49 @@
+Q. Compare in detail, @Component and @Bean.
+
+1. Description :
+
+- @Component : is an annotation used to mark a class as Spring managed bean
+
+- @Bean : is an annotation used to explicitly configure a bean
+
+2. Location :
+
+- @Component : it is a class level annotation
+
+- @Bean : it is a method level annotation
+
+3. Bean creation mechanism :
+
+- @Component : the marked class is automatically registered with spring IoC container because
+it is detected as class path scanning for beans in enabled
+
+- @Bean : the marked method needs to combine with @Configuration to register it with Spring
+IoC container and this method returns the bean instance
+
+4. Control :
+
+- @Component : Since, this bean is totally created and managed by the Spring IoC container, we have
+less flexibility and control over how the bean is created
+
+- @Bean : Since, we manually configure the bean , we have total control how the bean is created, giving
+us more control and flexibility
+
+5. Specialisation :
+
+- @Component : It has multiple stereotype annotations like @Controller, @Service and @Repository
+
+- @Bean : It has no stereotype annotations
+
+6. Scope and Dependency :
+
+- @Component : defualt bean scope is singleton, but can be changed using @Scope annotation or scope
+property
+
+- @Bean : defualt bean scope is singleton, but can be changed using @Scope annotation or scope
+property
+
+7. Detection :
+
+- @Component : automatic via component scan
+
+- @Bean : needs manual detection via @Configuration.
