@@ -1,0 +1,69 @@
+Q. Explain in details String Constant Pool (SCP)
+
+1. SCP is a special area in Java Heap memory, which is used to store 'set' of string literals
+
+2. It ensures that there are 'unique' string literals stored in turn saving memory and improving
+the performance
+
+3. How SCP works :
+
+- When we create String using literal approach i.e String s = "Hello", JVM checks whether we have
+a string with content "Hello" in the SCP. If it doesn't exist, an new string literal is created
+in the SCP. Next time, when we get a new request for same literal, JVM will again check the SCP
+ and this time, since the string already exists, no new object is creates. Instead it points, to the
+ present object in scp
+
+ String a = "Hello"; String b = "Hello";
+a == b // true here both a and b are pointing to same object in the SCP
+a.equals(b) //true, same content
+
+- When we create a String using the new operator i.e String s = new String("Hello"); a new String
+object is created in the Java Heap memory and also in the SCP 'if' there it is not already present
+in SCP. But the reference will always point to the Heap Object and not SCP. So equals() always return
+true if content is same , but "==" will always return false if they are created using new
+
+String a = new String("Hello"); String b = new String("Hello");
+a == b //false, both pointing to different objects in Heap
+a.equals(b) //true both have same content
+
+4. Advantage :
+
+- Reduce memory utilisation as only distinct values are used
+
+- Ensures immutability because multiple references are pointing to same object and changes may lead to
+ambiguity
+
+5. SCP is unaccessible to garbage collector even if the literals are not referenced by anyone. Instead they will
+be destroyed when JVM shuts down.
+
+6. Example :
+
+		String s1 = "Hello";
+		String s2 = "Hello";
+		System.out.println(s1==s2);
+		System.out.println("Is s1.equals(s2)? : " + s1.equals(s2));
+
+		String s3 = new String("Hello");
+		String s4 = new String("Hello");
+		System.out.println(s3==s4);
+		System.out.println("Is s3.equals(s4)? : " + s3.equals(s4));
+
+		String s5 = s1;
+		System.out.println(s5 == s1);
+		System.out.println(s5 == s3); // s3 in heap s5 in SCP
+
+		String s6 = s3.intern(); // intern checks if s3 content literal is present in SCP
+		System.out.println(s6 == s1);
+
+- Output :
+
+true
+Is s1.equals(s2)? : true
+false
+Is s3.equals(s4)? : true
+true
+false
+true
+
+
+
