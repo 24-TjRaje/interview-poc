@@ -1,0 +1,44 @@
+Q. Compare : JDK, JRE and JVM
+
+1. Full form :
+
+- JDK : Java Development Kit
+
+- JRE : Java Runtime Environment
+
+- JVM : Java Virtual Machine
+
+2. Purpose :
+
+- JDK : It is a software development kit, which is used to create, test and debug Java
+applications
+
+- JRE : It is a package which is exclusively used to run and test java applications
+
+- JVM : It is a component that inteprets Java Byte Code and execute it on system hardware
+essentially running the Java programs
+
+3. Components :
+
+- JDK : Consists of JRE, compiler, debugger and documentation
+
+- JRE : Consists of JVM and core libraries/packages like java.lang etc.
+
+- JVM : Consist of Class Loader, Garbage Collector, Memory Areas and Execution Engine that
+executes the byte code
+
+4. Usage :
+
+- JDK : Used by developers to build, debug, run and test Java applications
+
+- JRE : Used by testers to run and test Java application.
+
+- JVM : Used to execute the java bytecode on the System Hardware
+
+5. Chronology :
+
+- JDK : Includes both JVM and JRE
+
+- JRE : Is a part of JDK and includes JDK within itself
+
+- JVM : It part of both JVM and JDK
