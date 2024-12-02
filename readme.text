@@ -1,0 +1,58 @@
+Q. Give ways to create mutable string.
+
+1. StringBuilder class :
+
+- StringBuilder class is used to create mutable string objects.
+
+- It is fast but not thread safe
+
+- Ex. StringBuilder sb = new StringBuilder([Literal/ String reference/ CharSequence]);
+
+2. StringBuffer class :
+
+- StringBuffer class is also used to create mutable strings
+
+- It is slow but thread safe
+
+- Ex. StringBuffer sb = new StringBuffer([Literal/ String reference/ CharSequence]);
+
+3. Sample code :
+
+public static void main(String[] args) {
+
+        String mutable = "John Wick";
+        System.out.println("Using string builder");
+        StringBuilder sb = new StringBuilder(mutable);
+        System.out.println("Before update : " +sb);
+        sb.append("Chapter 1");
+        System.out.println("After update : " +sb);
+        System.out.println("Using string buffer");
+        StringBuffer sbf = new StringBuffer(sb);
+        System.out.println("Before update : " + sbf);
+        sbf.append(" Beginning");
+        System.out.println("After update : " + sbf);
+
+        System.out.println("Simple string : " + mutable);
+        System.out.println("String builder string : " + sb);
+        System.out.println("String Buffer string : " + sbf);
+
+    }
+
+ output :
+
+  Using string builder
+ Before update : John Wick
+ After update : John WickChapter 1
+ Using string buffer
+ Before update : John WickChapter 1
+ After update : John WickChapter 1 Beginning
+ Simple string : John Wick
+ String builder string : John WickChapter 1
+ String Buffer string : John WickChapter 1 Beginning
+
+ 4. Other options :
+
+ - String reassignment is another method to update string content,but here just the
+ reference is updated pointing to new created object. Also is not recommended as many
+ strings without reference will be created causing performance and memory issues.
+
