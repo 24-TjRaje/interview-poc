@@ -1,0 +1,52 @@
+Q. Why are strings immutable in nature in Java?
+
+1. Immutability is a concept where once a value is assigned to a object/variable, its
+content cannot be changed ever again
+
+2. String Pool :
+
+-  A special area in heap memory where string literals are stored
+
+- When a string is created using literal notation, it is first checked of that string is
+present in the SCP, if yes its reference is returned or else a new literal is added to the
+SCP.
+
+- If many variables are referencing to same object and one modifies the content, it'll be
+reflected in other variables as well , since the literal is shared by them in SCP which
+is not a desired outcome
+
+- So string in Java is immutable
+
+3. Security :
+
+- String is the most use data type in the programming world and use to store a lot of
+real world data like name, address along with sensitive data like passwords etc.
+
+- If String was mutable and somehow an attacker could get hold of it and change its value
+to cause disruptions.
+
+- To avoid such incidents, Strings are immutable in Java providing security
+
+4. Thread safety :
+
+- The value assigned to a string doesnt change once assigned, so in a multi-threaded
+environment, multiple thread can reads it value without the issue of concurrent update
+
+- This eliminates the need of synchronisation
+
+5. Performance optimisation :
+
+- Due to SCP, only distinct literals are stored in the heap memory which can be referenced
+by multiple variables.
+
+- As a result a lot of memory is saved which in turn would have been consumed by duplicated
+literals
+
+6. Hashcode caching :
+
+- As they are immutable, once their value is assigned, its generated hashcode is not going
+ change ever again, so it is mostly used as a key for Map collection objects. Also, its
+ value can be cached as it'll never change and returned immediately.
+
+ - If it were mutable, every time the hashcode were to be calculated causing performance issue
+
