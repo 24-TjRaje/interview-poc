@@ -1,0 +1,27 @@
+Q. Explain the difference between throw and throws keyword
+
+1. Purpose :
+
+- throw : Used to explicitly create an exception object and throw that exception
+
+- throws : Used to declare that a method can throw a particular exception that needs to
+be handled by the caller
+
+2. Location :
+
+- throw : Is generally placed in the method definition or code block
+
+- throws : Is placed in the method signature
+
+3. Exception count :
+
+- throw : throws only one exception at a time
+
+- throws : we can have a several exceptions that can possible be thrown separated
+by , after throws keyword
+
+4. Checked and Unchecked behaviour :
+
+- throw : can be used alongside both checked and unchecked exceptions
+
+- throws : mostly used alongside checked exceptions
