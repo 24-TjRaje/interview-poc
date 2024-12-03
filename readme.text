@@ -1,0 +1,26 @@
+Q. Explain in detail : Marker Interfaces in Java.
+
+1. Interfaces having no methods present in it , instead it notifies the compiler, JVM that the implementing classes
+have some special property that is to be used by compile time or run time. Also known as tagging interface.
+
+2. These interfaces signifies that certain processing needs to be done for implementation classes like when a class
+is implementing a Serializable interface, it tells that serializable mechanism can be used for these classes instances
+
+3. How to create a custom Marker interface
+
+- Create an interface with empty methods
+
+public interface MarkerDemo { };
+
+- We can create a class which extends this class and can somewhere check using instanceof and allow certain operation
+to implementation class
+
+4. Famous Marker interfaces :
+
+- Serializable : By implementing this interface, the instances of the class can be serialized ( convert object to byte
+stream) or deserialize (opposite) . If we try it with a class that doesnt implement Serializable, we get
+NotSerializableException
+
+- Cloneable : By implementing this interface, the instances of class can be cloned else we get CloneNotSupportedException
+
+5. Annotation can be used as an alternative to Marker Interfaces these days.
