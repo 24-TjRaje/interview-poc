@@ -1,0 +1,73 @@
+Q. Explain the differences between HashMap and HashTable
+
+1. Thread Safety :
+
+- HashMap : By default HashMap is not thread safe. In order to get a thread safe instance,
+you can use Collection.synchronisedHashMap() or new ConcurrentHashMap();
+
+- HashTable :  By default, HashTable is thread safe as it is already synchronised
+
+2. Performance :
+
+- HashMap : It is highly fast as it is not synchronised and multiple threads can
+operate on it at any given time
+
+- HashTable : It is slow due to being synchronised only one thread is operating on the entire
+HashTable at any given time and also their are overheads of acquiring object locks
+
+3. Null keys and values:
+
+- HashMap : Allows one null key and multiple null values
+
+- HashTable :  Doesnt allow null keys and value. If added wil throw null pointer exception
+
+4. Hierarchy :
+
+- HashMap : Child of AbstractMap and implements Map interface
+
+- HashTable : Child of Dictionary and implements Map interface
+
+5. Default Capacity :
+
+- HashMap : 16 with load factor of 0.75
+
+- HashTable : 11 with load factor of 0.75
+
+6. Introduction and Relevence :
+
+- HashMap : Version 1.2 and highly Advanced and useful over HashTable
+
+- HashTable : Version 1.0 and is a legacy feature , not recommended
+
+7. Example :
+
+    public static void main(String[] args) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        Hashtable<String, Integer> hashtable = new Hashtable<>();
+
+        hashMap.put("Tejas", 1);
+        hashMap.put("Raje", 2);
+        hashMap.put(null,null);
+        hashMap.put("Roman", null);
+        System.out.println(hashMap);
+
+        hashtable.put("Tejas", 1);
+        hashtable.put("Raje", 2);
+        System.out.println(hashtable);
+
+        //hashtable.put("Dan", null);
+        hashtable.put(null, 2);
+
+    }
+
+8. output :
+
+{null=null, Tejas=1, Roman=null, Raje=2}
+{Raje=2, Tejas=1}
+Exception in thread "main" java.lang.NullPointerException
+	at java.base/java.util.Hashtable.put(Hashtable.java:476)
+	at com.interview.interview_poc.HashMapTableDemo.main(HashMapTableDemo.java:23)
+
+Exception in thread "main" java.lang.NullPointerException: Cannot invoke "Object.hashCode()" because "key" is null
+	at java.base/java.util.Hashtable.put(Hashtable.java:481)
+	at com.interview.interview_poc.HashMapTableDemo.main(HashMapTableDemo.java:24)
