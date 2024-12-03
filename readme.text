@@ -1,0 +1,55 @@
+Q. Explain the difference between Abstract class and Interface
+
+1. Purpose :
+
+- Interface : Interface provides us a contract which its implementation class needs to fullfil.
+It declares behaviour, methods that the implementing classes need to define.
+
+- Abstract : Abstract class are classes having concrete methods alongside abstract method which
+the extending / inheriting classes have to provide definition as per their needs
+
+2. Provided Implementation :
+
+- Interface : Implementing classes need to provide full implementation.
+
+- Abstract : Extending classes need to provide at least partial implementation
+
+3. Method Access Modifiers :
+
+- Interface : All provided methods are abstract and public in nature. From Java 8, it also
+supported default and static methods. Java 9 allowed private methods in interface.
+
+- Abstract : Abstract classes support methods with all the access modifiers like private,
+ public, protected, abstract, static, final etc
+
+ 4. Field Access Modifiers :
+
+ - Interface : All the fields in interface are public final and static
+
+ - Abstract : There is not restriction on field access modifiers
+
+ 5. Static and Instance blocks allowed :
+
+ - Interface : No
+
+ - Abstract : Yes
+
+6. Constructor allowed :
+
+- Interface : No
+
+- Abstract : Yes
+
+7. Multiple Inheritance :
+
+- Interface : A class can implement multiple interfaces at a given time
+
+- Abstract :  A class can extend only a single class at any given time.
+
+8. Real world example :
+
+- Interface : See it as an question paper, which has only questions which are declared
+and you are the one who will define the answers.
+
+- Abstract : See it as a workbook which has partial answers and we need to add the
+ remaining one
