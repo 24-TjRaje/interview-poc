@@ -1,0 +1,54 @@
+Q. Explain features of Java 8, Java 17, Java 23
+
+1. Java 8: (2014)
+
+a. Lambda Expressions : A functional style to provide implementation of a method without defining the signature.
+Similar to arrow functions in Java Script and used for small and anonymous function in a compact way.
+
+b. Functional Interface : An interface having exactly one abstract method, whose implementation can be provided
+by lambda expression in a compact way. Example Comparator, Runnable, Callable, Predicate etc.
+
+c. Stream API : A declarative way to process collections using functional style i.e lambda expressions making
+it more concise and readable. Ex. filter(), map(), distinct(), sort(), collect() etc.
+
+d. Default and Static method in the Interfaces : Helps in adding some concrete methods in interfaces with some default
+implementation which otherwise would had to be implemented by child classes which can eventually break the existing code
+
+e. Method/Constructor reference : A more readable way to call the methods using the :: operator. Example. If a class
+A has a method call and also a constructor, we can call that method as A::call or constructor as A::new
+
+f. Optional : A class that creates a wrapper around an object which avoids NullPointerException if object is null
+. Important methods are .isPresent(), get(), getOrElse() etc.
+
+g. New Date and Time API : Inspired by Joda Date and Time API, having immutable objects and a more thread-safe way to
+handle Date and Time Operations. LocalDate = provides date, LocalTime = provides time, LocalDateTime = provides timestamp
+, ZonedDateTime = timestamp for a particular time zone, Duration ans Period = compute time differences
+
+h. NashHorn Java Script Engine :  A more powerful Engine to execute Java Script on JVM than its predecessor Rhino engine
+
+i. @FunctionalInterface : an annotation that checks at compile time whether the interface that this annotation has been
+applied has only one abstract method. If not throws NotAFunctionalInterfaceException
+
+j. Collectors class : an utility class with static methods that can collect the streamed object into a different types
+of collection implementation like set, list, map etc
+
+2. Java 17 : (2021)
+
+a. Sealed access modifier : A modifier which tells which classes(final) can extend this class. It allowed classes are provided
+ after the permits keyword in a ',' separations. Helps in controlling inheritance for classes.
+
+b. Pattern Matching in the switch statements : preview feature
+
+c. Foreign Function and Memory API : A way to access the memories outside the Java heap and their management
+
+d. Removal of Applet API - java Apps running in browser, and Remote Method Invocation (RMI) API
+
+e. Enhance Random number generator : New and better interfaces to create Random Numbers like RandomGenerator interface
+and stream api based approach to create a sequence of Random numbers
+
+3. Java 23 : (2023)
+
+a. Virtual Threads enhancements: Threads similar to normal threads but having low resource consumption for better concurrency in
+large scale applications. Thread.ofVirtual().start() = creates a virtual thread
+
+b. Enhancements in Foreign Function and Memory API (Incubator) for native memory management
