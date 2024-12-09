@@ -1,0 +1,483 @@
+Q. Explain OOP in Java
+
+1. OOP stands for Object Oriented Programming.
+
+2. Data Hiding :
+
+- A principle of OOP which states that the internal data members/fields should not be directly accessible outside
+of the class.
+
+- It is achieved by declaring the fields/ data members of a class with 'private' access modifier.
+
+- It helps in achieving security
+
+- Example : The Order machines in a McDonald's arent accessible from outside and are only accessible from inside the store
+
+3. Abstraction :
+
+- A principle which asks us to hide the internal implementations from outside and provide just the set of services that
+are offered by this class
+
+- This is achieved by creating interfaces and abstract classes which will provide the set of services and are later
+implemented or extended to provide concrete definition for the declared set of services
+
+- Example : The counter in the McDonald's has the todays menu as will current order that is being served acting as an
+interface listing the food services available, but the actual food is prepared in the kitchen which is not visible from
+outside hiding implementation i.e how orders are being prepared
+
+- Helps in providing security as implementation as hidden. (McDonald's secret recipe from fries is safe as the process
+is hidden from outside)
+
+- Enhances flexibility as changes can be made without them being noticed from outside. (The softie in an order was spoilt?
+ no problem make a new one, the customer wont notice as kitchen is not accessible from outside view)
+
+4. Encapsulation :
+
+- A principle that suggests binding the data members and the methods into a single unit.
+
+- It is a combination of Data Hiding and Abstraction where all members are made private and are accessible outside via
+getter/setter method which are 'public' in method
+
+- Enhanced Security and makes the code modular
+
+- Kitchen, Employees, Furniture etc are the data members and the preparing orders, serving them and providing bills are
+the methods which together represent /encapsulates as a McDonald's store
+
+- A class is tightly encapsulated if all its data members are declared as "private" irrespective to its methods.
+
+- If Parent class is not tightly encapsulated, then its child can never be tightly encapsulated
+
+5. Inheritance :
+
+- A principle where one class extends another class creating a parent-child relationship between them.
+
+- Encourages code reusability.
+
+- Known to be 'Is-A' relationship and achieved using the 'extends' keyword.
+
+- All the methods/members declared in the parent class a by default available to the its child classes.
+. But the member/methods of child classes are never available to its parent class.
+
+- A Parent class reference can hold the Child class object, but cannot call the child specific
+methods
+
+- A Child class reference cannot be used to hold the Parent Class Object.
+
+- Code Example :
+
+public class Parent {
+
+    public void introParent() {
+        System.out.println("Hello. I'm the Parent class");
+    }
+}
+
+public class Child extends Parent{
+
+    public void introChild() {
+        System.out.println("Hello. I'm the Child class");
+    }
+}
+
+package com.interview.interview_poc;
+
+public class InheritanceTest {
+
+    public static void main(String[] args) {
+        System.out.println("Inheritance Demo");
+
+        Parent parent = new Parent();
+        Child child = new Child();
+        Parent parentRef = new Child();
+        System.out.println("Child class reference cannot be used to hold Parent object " +
+                "It will throw incompatible types - Compile Time Exception " +
+                "Comment below line to see the error");
+        //Child childRef = new Parent();
+
+        parent.introParent();
+        child.introChild();
+        child.introParent();
+        parentRef.introParent();
+        System.out.println("A parent ref can hold child objects but cannot call child methods. " +
+                "If tried , then we get error stating 'cannot find symbol' " +
+                "Uncomment below and check");
+        //parentRef.introChild();
+    }
+}
+
+- The Object class is the Parent class of all the predefined and custom classes in the Java and its by default and
+automatically extended by every class in Java. So it is a root class of all classes
+
+- The Throwable class is the Parent class of all errors and exceptions in Java . So it is a root class of the Exception
+ hierarchy. Throwable though is the child class of Object class.
+
+6. Multiple Inheritance :
+
+- A concept in OOP where a class is inheriting from two Parent classes i.e extends two different classes.
+
+- In Java, one class cannot extend more that one class, multiple inheritance with respect to class is not permitted.
+
+- In Java, one class can implement multiple interfaces, multiple inheritance is supported via interfaces.
+
+- If a class doesnt extend any other class, then it is a direct child of Object class
+
+- If a class is extending other class, then it is indirect child of Object class via multi-level inheritance i.e indirect
+inheritance from parent ( Grandchild receiving its grandfathers property)
+
+7. Why multiple inheritance is not supported in Java ?
+
+- Imagine if class in java extending two classes. These parent classes are having a method with same name, arguments and
+also the return type.
+
+- If child tries to call the method, JVM will be confused which one to be invoked due to ambiguity problem.
+
+- So multiple inheritance w.r.t to classes is not supported
+
+- Interfaces only have abstract methods, now even if two different interfaces have a method with same name, args and
+ return type, the class that will be inheriting it i.e implementing them will provides its own implementation for those
+  ambiguous methods.
+
+- So multiple inheritance w.r.t to interface is supported to Java
+
+8. Cyclic Inheritance :
+
+- It is a scenario where two classes are trying to extends each other leading to a race condition/ deadlock
+
+- If encountered, we will get a CompileTimeException stating 'Cyclic Inheritance involved in either classes'
+
+9. Has-A Relationship :
+
+- A relationship between classes where one class has a data member being type of another class
+
+- Has 2 types : composition and aggregation
+
+- Its main disadvantage is that it increased dependency among the classes
+
+10. Composition :
+
+-  A type of has a relationship, where the independent object cannot exist if the dependent object is destroyed
+
+- If the instance of class having data member of type other class is destroyed, then there is no chance that the data
+member object may exist
+
+- Called as strong association
+
+- Here the independent objects are created using new and directly assigned to the data member
+
+- Example : Mobile consists of internal storage, if the mobile is destroyed there is no chance of motherboard to exist
+
+11. Aggregation :
+
+- A type of has a relationship where the independent object exists even if the dependent one is destroyed
+
+- Called as weak associated
+
+- Here the independent object is created outside and its reference is passed to the dependent object
+
+- Example : SimCard can exists independently even if the mobile doesnt exist.
+
+12. Method Signature :
+
+- Method representation as method name and type of its arguments.
+
+- Eg :  public int sum( int a, int b ) => sum( int, int );
+
+- return type plays no part in the method signature
+
+- JVM resolves which method to be invoked based on the method signature
+
+- we cannot have 2 methods with same signature in a class/interface.
+
+- JVM will try to match the exact match for args, if not found it will promote the passed arg to a higher data type to
+see if any matches. If yes that will be invoked else again promotion till nothing is found, in that case it will throw
+the no suitable method found exception.
+
+- Promotion sequence : byte -> (short | char) -> int -> long -> float -> double.
+boolean cannot be promoted as it is altogether a different data type
+
+13. Polymorphism :
+
+- A OOP concept where there a multiple methods with same name but different arguments in same class.
+
+- Ex. public void intro(String name), public void intro(int i), public void intro(), public void intro(int i, char c)
+
+- Number of arguments doesnt matter.
+
+- Helps in promoting flexibility in classes
+
+14. 3 Pillars of OOP :
+
+- Encapsulation  => Talks about the code Security.
+
+- Inheritance => Talks about code reusability.
+
+- Polymorphism => Talks about the code flexibility
+
+15. Overloading :
+
+- A type of polymorphism where a class has methods with same names but different arguments types
+
+- Such methods are called as overloaded methods or method overloading.
+
+- Here compiler is responsible for resolving the method to invoke, based on the reference type of identifier and not the
+assigned object.
+
+- Known as static binding | compile-type polymorphism| early binding.
+
+- Automatic promotion :
+
+When compiler is resolving the method and if it doesnt find exact match for passed argument,
+compiler will promote the passed argument to next higher type and check if any method matches. If yes, that will be
+invoked else next promotion will happen. If no match is found we will get Compilation Error saying ' no suitable method
+found'.
+
+Example :
+
+    public void sign1(int i) {
+        System.out.println(" A method with int args. Passed arg : " + i);
+    }
+
+    public void sign1(float f) {
+        System.out.println(" A method with float args. Passed arg : " + f);
+    }
+
+     child.sign1(10);
+     child.sign1(10.2f);
+     child.sign1('a');
+     child.sign1(10.3d)
+
+In first call, the int args method will be executed due to exact match.
+In second call, the float args method will be executed due to exact match.
+In third call, no exact match is found, so the char is promoted to int resulting in exact match and int args being invoked
+In fourth call, no exact match is found, and double cannot be promoted further so no match is found resulting in
+no suitable method found
+
+- Argument value conflict :
+
+When there a overloaded methods in such a way that the passed argument would match both the methods, in that case the
+Child class method will take the priority and get executed
+
+Example :
+
+    public void earlyPoly(String s) {
+        System.out.println("This is a String version");
+    }
+
+    public void earlyPoly(Object o) {
+        System.out.println("This is a Object version");
+    }
+
+        child.earlyPoly("tejas");
+        child.earlyPoly(new Object());
+        child.earlyPoly(null);
+
+In first case , the string arg is found and exact match is found, so string version is invoked
+In second case, passed arg is of type Object and exact match is found, so object version is invoked
+In third case, passed argument is null, which is a valid value for both string and object. But since String is a child
+class of Object it takes priority, the String version is invoked
+
+- Argument value conflict part 2 :
+
+When there are overloaded methods in a class, and the passed argument can be matched to any of the overloaded methods
+but argument type of overloaded methods have no relation between them, in that case we get error stating :
+"reference to method is ambiguous"
+
+Example :
+
+    public void conflictPart2(Integer i) {
+        System.out.println("This is Integer version");
+    }
+
+    public void conflictPart2(Long l) {
+        System.out.println("This is Long version");
+    }
+
+        child.conflictPart2(Integer.valueOf(10));
+        child.conflictPart2(Long.valueOf(20l));
+        child.conflictPart2(null);
+
+First call : argument is of type Integer so due to exact match the Integer version is invoked.
+Second call : argument is of type Long so due to exact match the Long version is invoked.
+Third call : argument passed is null, which is a valid value of both Integer and Long. Since, there is no relation
+between Integer and Long, we get the 'reference is ambiguous' error.
+
+- Var Args priority:
+
+If methods are overloaded and we do have a varArgs version as well, in that case if no match is varArgs version gets
+invoked acting as a default fallback
+
+Example
+
+    public void argInt(int i) {
+        System.out.println("Single int arg version");
+    }
+
+    public void argInt(int i, int i1) {
+        System.out.println("Double int arg version");
+    }
+
+    public void argInt(int...i) {
+        System.out.println("Var args int arg version");
+    }
+
+            child.argInt(10);
+            child.argInt(10, 20);
+            child.argInt();
+            child.argInt(10,20,30);
+
+First call : invokes the single int arg version
+Second call : invoked the double int arg version
+Third & Fourth call : since no match is found, the varArgs gets invoked acting as default.
+
+- Reference type priority in overloading :
+
+If there are overloaded methods in a class, where the arguments have a parent child relationship. Here if the parent
+reference is holding a child object, in that case the parent version will be called because the compiler resolves the
+method based on the reference type of argument passed irrespective to the assigned object
+
+Example :
+
+public class Parent
+
+public class Child extends Parent
+
+    public void relationVersion(Parent p) {
+        System.out.println("Parent version");
+    }
+
+    public void relationVersion(Child c) {
+        System.out.println("Child version");
+    }
+
+            Parent parent = new Parent();
+            Child child = new Child();
+            Parent parentRef = new Child();
+
+                    InheritanceTest itc = new InheritanceTest();
+                    itc.relationVersion(parent); // parent
+                    itc.relationVersion(child); //child
+                    itc.relationVersion(parentRef); // parent
+
+First two cases are exact match, in third case , since the ref type is of Parent, parent version is invoked
+
+16. Overriding :
+
+- A type of polymorphism where the child classes redefine the implementation of parent class method as per its need.
+
+- The parent class method that is been redefined is called overridden method
+
+- The child class method that is redefining the implementation is called overriding method.
+
+- Example :
+
+public class Parent {
+
+    public void yourVehicle() {
+        System.out.println("You'll inherit Splendor +");
+    }
+}
+
+public class Child extends Parent {
+
+    @Override
+    public void yourVehicle() {
+        System.out.println("You will inherit Karizma XMR");
+    }
+}
+
+            Parent parent = new Parent(); //You'll inherit Splendor +
+            Child child = new Child(); // You will inherit Karizma XMR
+            Parent parentRef = new Child(); // You will inherit Karizma XMR
+
+- In overriding, the method resolution is handled by the JVM alike the compiler in Overloading. Hence the invoked
+method depends on the object on RHS than the reference holding it on LHS
+
+- Also called as runtime polymorphism | dynamic binding | late binding
+
+- For overriding , the method signature should be same along with the return type . From Java 1.5, the return type can
+be different, but should be a child type of the original return type. This before is not applicable for primitive
+data types
+
+- Overriding of private | final method is not applicable. Private methods are not accessible in child classes, so
+you can define a similar method in child but that is not called overriding. In case of final method, if you try to
+override you get an compile error saying 'overridden method is final'
+
+- we can override public | abstract methods in overriding. We can override a non final method as final, abstract to
+concrete or concrete as abstract method
+
+- the scope of the access modifier of the method cannot be reduced . Scopes (Lowest to Highest)
+Private < Default < Protected < Public.
+
+If tried we get an compilation error stating 'trying to apply weaker privelege access'
+
+- If overriding method is throwing some checked exception, the overridden method should also throw that Checked exception
+ or its parent exception. if not done, we get compilation error stating 'overridden method doesnt throw exception'.
+ There is no such issue for RunTimeException
+
+-  Overriding concept is not applicable for static functions. It may same valid, but is called method hiding
+In method hiding, the method resolution is taken care by compiler meaning by the reference variable
+
+- VarArgs method has to be overloaded as varArgs only else it becomes overloading
+
+- Overriding not applicable for variables and will also decided by the compiler i.e reference type
+
+17. Constructor :
+
+- Initialises the data members of class when object is created
+
+- Name of constructor is same as that or class and doesnt have any return type
+
+- Applicable access modifiers for constructors are public, protected, private and default. If provided we get compile time
+ error
+
+- Can used in class, abstract class but not in interfaces
+
+- If we dont explicitly write a constructor, compiler creates a default no args constructor for us. But if create our
+own constructor, that default constructor is not available for us.
+
+- The access modifier of default constructor is same as that of class and has no args and a single line; super(), a call
+to parent class constructor
+
+- First line of constructor can be super() , call to parent constructor or this() call to current class constructor
+
+- If placed any where else we get compile time error ''call to super/ this must be first statement in constructor''
+
+- We cannot have super() and this() together in a constructor or we get Compilation error
+
+- Also we cannot super() and this() outside of constructor
+
+18. Constructor overloading :
+
+- Multiple constructors in a class having different arguments
+
+- Child cannot override parent class constructor
+
+- every time child constructor is called, automatically its parent constructor is also called
+before the statements in child constructor
+
+- recursive constructor call leads to Compilation Error
+
+- if parent constructor throws an checked exception, child need to throw the same or its Parent exception
+
+19. Coupling :
+
+- The degree of dependency between classes is called coupling
+
+- High coupling results in unmaintainable code, difficult is making changes without touching
+other components and low code reusability
+
+- Low Coupling is always preferred
+
+20. Cohesion :
+
+- Clear single responsibility per component is cohesion (Single Responsibility Principle)
+
+- High Cohesion preferred
+
+- Totally opposite of Coupling.
+
+
+
+
+
+
