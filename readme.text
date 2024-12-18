@@ -1,0 +1,474 @@
+Q. Explain Exception Handling
+
+1. Exception : An unwanted, unexpected event that disturbs the normal flow of the program and can also terminate it
+
+2. Exception Handling : A way to handle exception in a such a graceful way that the program may continue even after
+an exception has been encountered without getting terminated.
+
+3. Default Exception Handling Mechanism :
+
+- When an exception occurs, the current method needs to create an Exception object with the exception name, description
+and location of where it has occurred. This object is then handed over to the JVM.
+
+- Then JVM checks whether there is an exception handler present in the current method. If yes it is handled gracefully,
+else removes that method from the stack frame .
+
+- Later, JVM checks for the next caller method in the stack frame. It will either gracefully handle the thrown exception
+or its stack entry would be removed from stack
+
+- This process will continue, till the main() method and based on the error handling mechanism, main() would either handle
+it or its entry will also get removed from thread's stack frame.
+
+- Finally JVM will this exception object to Java's default exception handler, which will simply print the exception details
+to the console and the program is terminated.
+
+4. Exception Hierarchy :
+
+- Throwable is the root class of all the exceptions in Java. Throwable is the child class of Object class.
+
+- Throwable has 2 child classes, Exception and Error.
+
+- Exception classes contains all the exceptions, be Runtime or CompileTime. Exceptions are recoverable and can be handled
+gracefully
+
+- Error classes are non recoverable and are occurred due to lack of resources and cannot be handled gracefully.
+
+5. Checked Exceptions :
+
+- Exceptions which are checked by the compiler whether they are handled by the programmer to ensure smooth execution are
+called as checked exceptions.
+
+- This exception are known beforehand and are handled using try-catch or throws keyword and are recoverable
+
+- Example : FileNotFoundException, ClassNotFoundException etc.
+
+- An Exception is called fully-checked if itself and all its child exceptions are  checked.
+
+- An Exception is partially-checked if not all of its child exceptions are checked. There are only 2 , Exception and
+Throwable.
+
+6. Unchecked Exceptions :
+
+- Exceptions which not checked by compiler whether handled or not are called as Unchecked exception.
+
+- They occur due to some logic error or programmatic error and occur dynamically.
+
+- All Errors and RunTimeExceptions are called unchecked excpetion.
+
+- Example : NullPointerException, ArithmeticExcpetion etc.
+
+7. Exceptions are always thrown at runtime, be it Checked or Unchecked.
+
+8. Exception handling using try-catch:
+
+- try catch block is used to handle the exceptions
+
+- we place the statements that may throw an exception in the try {} block.
+
+- we use the catch(){} block to catch the exceptions that might get thrown from the above try block
+
+9. Without try-catch : Handled by default exception handler of JAVA.
+
+package com.interview.interview_poc;
+
+public class Test {
+
+    public static void main(String[] args) {
+        int i = 0;
+        int j = 10;
+        Thread.currentThread().setName("ExceptionDemo");
+
+            int k = j/i;
+        System.out.println("shutting down");
+    }
+}
+
+Result : Exception in thread "ExceptionDemo" java.lang.ArithmeticException: / by zero
+         	at com.interview.interview_poc.Test.main(Test.java:10)
+
+10. If no exception occurs :
+
+package com.interview.interview_poc;
+
+public class Test {
+
+    public static void main(String[] args) {
+        int i = 2;
+        int j = 10;
+        Thread.currentThread().setName("ExceptionDemo");
+        try{
+            int k = j/i;
+        } catch (ArithmeticException e) {
+            System.out.println("Caught an exception here : " + e.getMessage());
+        }
+        System.out.println("shutting down");
+    }
+}
+
+Result : shutting down
+
+Conclusion : If no exception get thrown, all the statements are executed except for once placed in the catch block
+
+11. If Exception us thrown, by an relevant check block is found.
+
+package com.interview.interview_poc;
+
+public class Test {
+
+    public static void main(String[] args) {
+        int i = 0;
+        int j = 10;
+        Thread.currentThread().setName("ExceptionDemo");
+        try{
+            int k = j/i;
+        } catch (ArithmeticException e) {
+            System.out.println("Caught an exception here : " + e.getMessage());
+        }
+        System.out.println("shutting down");
+    }
+}
+
+Result : Caught an exception here : / by zero
+         shutting down
+
+Conclusion : All statements BEFORE the one that caused the exception in "try" block are executed. The statements in the
+ catch block are also executed. Also the statements outside the try-catch are executed
+
+12. If exception is encountered,but no relevant catch block is found.
+
+package com.interview.interview_poc;
+
+public class Test {
+
+    public static void main(String[] args) {
+        int i = 0;
+        int j = 10;
+        Thread.currentThread().setName("ExceptionDemo");
+        try{
+            int k = j/i;
+        } catch (NullPointerException e) {
+            System.out.println("Caught an exception here : " + e.getMessage());
+        }
+        System.out.println("shutting down");
+    }
+}
+
+Result : Exception in thread "ExceptionDemo" java.lang.ArithmeticException: / by zero
+         	at com.interview.interview_poc.Test.main(Test.java:10)
+
+Conclusion : If no relevant catch block is found, the statements after statement that causes exception wont get executed.
+Let them be present in try or catch or outside no statement after exception will get executed and the program will be
+terminated abruptly
+
+13. Exception thrown in catch block or outside try:
+
+package com.interview.interview_poc;
+
+public class Test {
+
+    public static void main(String[] args) {
+        int i = 0;
+        int j = 10;
+        Thread.currentThread().setName("ExceptionDemo");
+        try{
+            System.out.println("in try");
+            int k = j/i;
+        } catch (NullPointerException e) {
+            System.out.println("Caught an exception here : " + e.getMessage());
+            int n = j/i;
+            System.out.println("end of catch block");
+        }
+        System.out.println("shutting down");
+    }
+}
+
+Result :
+in try
+Caught an exception here : / by zero
+Exception in thread "ExceptionDemo" java.lang.ArithmeticException: / by zero
+	at com.interview.interview_poc.Test.main(Test.java:14)
+
+
+Conclusion : statements in try before exception will get executed.  All other statements are skipped and program stops;
+
+14. Try to place only the statements that may cause exception in try{} to reduce focus area.
+
+15. Exception can also occur in catch and finally blocks
+
+16. Throwable class exception details method :
+
+- toString() : Prints the Exception Name and description.
+Example : java.lang.ArithmeticException: / by zero
+
+- getMessage() : Prints the exception description.
+Example : / by zero
+
+- printStackTrace() : Prints Name, description and Location of exception :
+Example : java.lang.ArithmeticException: / by zero
+          	at com.interview.interview_poc.Test.main(Test.java:11)
+
+package com.interview.interview_poc;
+
+public class Test {
+
+    public static void main(String[] args) {
+        int i = 0;
+        int j = 10;
+        Thread.currentThread().setName("ExceptionDemo");
+        try{
+            System.out.println("in try");
+            int k = j/i;
+        } catch (ArithmeticException e) {
+            System.out.println("Caught an exception here : ");
+            e.printStackTrace();
+            System.out.println(e.toString());
+            System.out.println(e.getMessage());
+        }
+        System.out.println("shutting down");
+    }
+}
+
+Result :
+
+"C:\Program Files\Java\jdk-21\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.1.4\lib\idea_rt.jar=53590:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.1.4\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath C:\Users\tejasraje\Downloads\interview-poc\interview-poc\target\classes;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-starter-web\3.3.5\spring-boot-starter-web-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-starter\3.3.5\spring-boot-starter-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-starter-logging\3.3.5\spring-boot-starter-logging-3.3.5.jar;C:\Users\tejasraje\.m2\repository\ch\qos\logback\logback-classic\1.5.11\logback-classic-1.5.11.jar;C:\Users\tejasraje\.m2\repository\ch\qos\logback\logback-core\1.5.11\logback-core-1.5.11.jar;C:\Users\tejasraje\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.23.1\log4j-to-slf4j-2.23.1.jar;C:\Users\tejasraje\.m2\repository\org\apache\logging\log4j\log4j-api\2.23.1\log4j-api-2.23.1.jar;C:\Users\tejasraje\.m2\repository\org\slf4j\jul-to-slf4j\2.0.16\jul-to-slf4j-2.0.16.jar;C:\Users\tejasraje\.m2\repository\jakarta\annotation\jakarta.annotation-api\2.1.1\jakarta.annotation-api-2.1.1.jar;C:\Users\tejasraje\.m2\repository\org\yaml\snakeyaml\2.2\snakeyaml-2.2.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-starter-json\3.3.5\spring-boot-starter-json-3.3.5.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.17.2\jackson-databind-2.17.2.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.17.2\jackson-annotations-2.17.2.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.17.2\jackson-core-2.17.2.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jdk8\2.17.2\jackson-datatype-jdk8-2.17.2.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jsr310\2.17.2\jackson-datatype-jsr310-2.17.2.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\module\jackson-module-parameter-names\2.17.2\jackson-module-parameter-names-2.17.2.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-starter-tomcat\3.3.5\spring-boot-starter-tomcat-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\apache\tomcat\embed\tomcat-embed-core\10.1.31\tomcat-embed-core-10.1.31.jar;C:\Users\tejasraje\.m2\repository\org\apache\tomcat\embed\tomcat-embed-el\10.1.31\tomcat-embed-el-10.1.31.jar;C:\Users\tejasraje\.m2\repository\org\apache\tomcat\embed\tomcat-embed-websocket\10.1.31\tomcat-embed-websocket-10.1.31.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-web\6.1.14\spring-web-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-beans\6.1.14\spring-beans-6.1.14.jar;C:\Users\tejasraje\.m2\repository\io\micrometer\micrometer-observation\1.13.6\micrometer-observation-1.13.6.jar;C:\Users\tejasraje\.m2\repository\io\micrometer\micrometer-commons\1.13.6\micrometer-commons-1.13.6.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-webmvc\6.1.14\spring-webmvc-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-aop\6.1.14\spring-aop-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-context\6.1.14\spring-context-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-expression\6.1.14\spring-expression-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-devtools\3.3.5\spring-boot-devtools-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot\3.3.5\spring-boot-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\3.3.5\spring-boot-autoconfigure-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\slf4j\slf4j-api\2.0.16\slf4j-api-2.0.16.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-core\6.1.14\spring-core-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-jcl\6.1.14\spring-jcl-6.1.14.jar com.interview.interview_poc.Test
+in try
+Caught an exception here :
+java.lang.ArithmeticException: / by zero
+/ by zero
+shutting down
+java.lang.ArithmeticException: / by zero
+	at com.interview.interview_poc.Test.main(Test.java:11)
+
+Process finished with exit code 0
+
+= The default Exception Handler internally uses the printStackTrace() when it handles an exception.
+
+17. Multiple catch blocks :
+
+- We can have multiple catch blocks to handle different exceptions that may get thrown in the try block.
+
+package com.interview.interview_poc;
+
+public class Test {
+
+    public static void main(String[] args) {
+        int i = 0;
+        int j = 10;
+        Thread.currentThread().setName("ExceptionDemo");
+        try{
+            System.out.println("in try");
+            int[] a = {1,2,3};
+            int k = j/i;
+            //System.out.println(a[3]);
+        } catch (ArithmeticException e) {
+            System.out.println("Caught an exception here : " + e.getMessage());
+        } catch (ArrayIndexOutOfBoundsException e1) {
+            System.out.println("Caught an exception here : " + e1.getMessage());
+        }
+        System.out.println("shutting down");
+    }
+}
+
+Result :
+
+in try
+Caught an exception here : / by zero
+shutting down
+
+-- If uncommented System.out.println(a[3]) and commented int k = j/i;
+
+Result :
+
+"C:\Program Files\Java\jdk-21\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.1.4\lib\idea_rt.jar=53767:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.1.4\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath C:\Users\tejasraje\Downloads\interview-poc\interview-poc\target\classes;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-starter-web\3.3.5\spring-boot-starter-web-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-starter\3.3.5\spring-boot-starter-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-starter-logging\3.3.5\spring-boot-starter-logging-3.3.5.jar;C:\Users\tejasraje\.m2\repository\ch\qos\logback\logback-classic\1.5.11\logback-classic-1.5.11.jar;C:\Users\tejasraje\.m2\repository\ch\qos\logback\logback-core\1.5.11\logback-core-1.5.11.jar;C:\Users\tejasraje\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.23.1\log4j-to-slf4j-2.23.1.jar;C:\Users\tejasraje\.m2\repository\org\apache\logging\log4j\log4j-api\2.23.1\log4j-api-2.23.1.jar;C:\Users\tejasraje\.m2\repository\org\slf4j\jul-to-slf4j\2.0.16\jul-to-slf4j-2.0.16.jar;C:\Users\tejasraje\.m2\repository\jakarta\annotation\jakarta.annotation-api\2.1.1\jakarta.annotation-api-2.1.1.jar;C:\Users\tejasraje\.m2\repository\org\yaml\snakeyaml\2.2\snakeyaml-2.2.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-starter-json\3.3.5\spring-boot-starter-json-3.3.5.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.17.2\jackson-databind-2.17.2.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.17.2\jackson-annotations-2.17.2.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.17.2\jackson-core-2.17.2.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jdk8\2.17.2\jackson-datatype-jdk8-2.17.2.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jsr310\2.17.2\jackson-datatype-jsr310-2.17.2.jar;C:\Users\tejasraje\.m2\repository\com\fasterxml\jackson\module\jackson-module-parameter-names\2.17.2\jackson-module-parameter-names-2.17.2.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-starter-tomcat\3.3.5\spring-boot-starter-tomcat-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\apache\tomcat\embed\tomcat-embed-core\10.1.31\tomcat-embed-core-10.1.31.jar;C:\Users\tejasraje\.m2\repository\org\apache\tomcat\embed\tomcat-embed-el\10.1.31\tomcat-embed-el-10.1.31.jar;C:\Users\tejasraje\.m2\repository\org\apache\tomcat\embed\tomcat-embed-websocket\10.1.31\tomcat-embed-websocket-10.1.31.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-web\6.1.14\spring-web-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-beans\6.1.14\spring-beans-6.1.14.jar;C:\Users\tejasraje\.m2\repository\io\micrometer\micrometer-observation\1.13.6\micrometer-observation-1.13.6.jar;C:\Users\tejasraje\.m2\repository\io\micrometer\micrometer-commons\1.13.6\micrometer-commons-1.13.6.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-webmvc\6.1.14\spring-webmvc-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-aop\6.1.14\spring-aop-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-context\6.1.14\spring-context-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-expression\6.1.14\spring-expression-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-devtools\3.3.5\spring-boot-devtools-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot\3.3.5\spring-boot-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\3.3.5\spring-boot-autoconfigure-3.3.5.jar;C:\Users\tejasraje\.m2\repository\org\slf4j\slf4j-api\2.0.16\slf4j-api-2.0.16.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-core\6.1.14\spring-core-6.1.14.jar;C:\Users\tejasraje\.m2\repository\org\springframework\spring-jcl\6.1.14\spring-jcl-6.1.14.jar com.interview.interview_poc.Test
+in try
+Caught an exception here : Index 3 out of bounds for length 3
+shutting down
+
+Process finished with exit code 0
+
+- The sequence of exception block matters, if we place the parent exception class before the child exception class we get
+compile time error saying 'Exception has already been caught'
+
+package com.interview.interview_poc;
+
+public class Test {
+
+    public static void main(String[] args) {
+        int i = 0;
+        int j = 10;
+        Thread.currentThread().setName("ExceptionDemo");
+        try{
+            System.out.println("in try");
+            int k = j/i;
+        } catch (Exception e1) {
+            System.out.println("Caught an exception here : " + e1.getMessage());
+        } catch (ArithmeticException e) {
+            System.out.println("Caught an exception here : " + e.getMessage());
+        }
+        System.out.println("shutting down");
+    }
+}
+
+Result : C:\Users\tejasraje\Downloads\interview-poc\interview-poc\src\main\java\com\interview\interview_poc\Test.java:14:11
+         java: exception java.lang.ArithmeticException has already been caught
+
+18. finally block :
+
+- A block whose statements will be executed irrespective to exception  being raised or not is called the finally block
+
+- Used for code clean ups.
+
+- Finally will always be executed , even if exception us not thrown, thrown and the catch block matched or not matched.
+
+19. finally vs return :
+
+- finally is always given priority over return. first finally will be executed, then return will be performed
+
+    public static int doSomething(int i) {
+        int k=10;
+        try{
+            System.out.println("in try");
+            k = k/i;
+            return k;
+        }catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            System.out.println("In finally");
+        }
+        return k;
+    }
+
+Result :
+
+ in try
+ In finally
+ 2
+
+- If return is placed in all try catch and finally block, then the return in the finally block will always get priority.
+
+    public static int doSomething(int i) {
+        int k=10;
+        try{
+            System.out.println("in try");
+            k = k/i;
+            return k;
+        }catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+            return -1;
+        } finally {
+            System.out.println("In finally");
+            return 999;
+        }
+    }
+
+Result :
+
+in try
+In finally
+999
+
+20. finally vs System.exit().
+
+- System.exit() dominated finally. Meaning if System.exit() is present before a finally block, then finally block will
+never get executed as JVM itself gets shutdown when System.exit() is used.
+
+    public static int doSomething(int i) {
+        int k=10;
+        try{
+            System.out.println("in try");
+            k = k/i;
+            System.exit(0);
+            return k;
+        }catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+            return -1;
+        } finally {
+            System.out.println("In finally");
+            return 999;
+        }
+    }
+
+Result :
+
+in try
+
+21. Finally block will only execute if the flow enters the try block and we can have nested try-catch block
+
+22. In multiple exceptions are getting thrown  i.e in try as well as in catch and in finally,
+in that case only the most recent one will be executed by the Default exception handler.
+
+23. try block should either be followed by catch or finally or both. Neither will result in Compilation Error stating
+try should be followed by catch or finally.
+
+24. catch without try is invalid resulting in C.E stating the same.
+
+25. finally without try is invalid resulting in C.E stating the same.
+
+26. try, catch, finally should be consecutive blocks without any other statement in between else results in C.E
+
+27. try, catch, finally should be enclosed in {} and we cannot have multiple finally
+
+28. throw statement:
+
+- used to explicitly create and return the Exception object to the JVM.
+
+- statements that are present after throw block will return in C.E stating unreachable statement.
+
+- throw can only be used with Throwable instances.
+
+29. throws keyboard :
+
+- used to notify that this method can throw a certain exception and caller needs to handle it on its
+end.
+
+- works only for checked exception which the caller method needs to handle or redelegate by using throws in
+the method signature
+
+- if there is a checked exception and it is not handled by try-catch or delegated via throws in method
+signature for a method, then we get C.E stating must be caught or declared to be thrown
+
+- can only be used with methods and constructors
+
+- if there is no chance of raising the mentioned fully checked exception in throws, then we get C.E saying
+x is never thrown
+
+30. Customised Exceptions :
+
+- defined by user as per business requirement.
+
+- extension of RuntimeException to make them unchecked.
+
+31. Try-with-resources : (1.7)
+
+- used to automatically close the resources which were opened during try block to save memory.
+
+- before this compulsory try has to be followed by catch or finally, but in try-with-resources this
+becomes optional.
+
+- finally becomes dummy here as resources will be auto closed at the end of try block, be it
+normal or abnormal termination.
+
+- note that resources should implement the AutoCloseable Interface to get them closed automatically
+
+- resources are passed as argument to try like :
+
+try(Resource a; Resource b;...Resource n)
+
+and are seperated via semicolon,
+
+- The declared resources are final in nature and cannot be reassigned
+
+32. Multi-catch block (1.7)
+
+- Specific multiple exceptions as argument to catch which can have similar exception handling mechanism
+
+- Separated by | and exceptions should not have any relation between them or else we get C.E
+
+- reduces code length.
+
+
+
+
+
+
+
